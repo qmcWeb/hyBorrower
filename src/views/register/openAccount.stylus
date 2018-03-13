@@ -1,38 +1,31 @@
-#login
+#openAccount
     background-color:  #F8F8F8;
     height: 100%;
     .main
         display: flex;
         align-items: center;
         flex-direction: column;
-        padding-top: .5rem;
         height: 100%;
         position: relative;
+        .top
+            font-size: .7rem;
+            color: #49496A;
+            width: 16.8rem;
+            margin: .75rem 0;
+            line-height: 20px;
         .login_input_box
             width: 100%;
             box-sizing: border-box;
             padding: 0 .75rem;
             background-color: #fff;
             position: relative;
-            .delete_active 
-                position: absolute;
-                width: 20px;
-                height 20px;
-                right: 1.5rem;
-                top: .825rem;
-                background: url('../../assets/images/login/account_delete.png') no-repeat;
-            .show_password
-                position: absolute;
-                width: 20px;
-                height 20px;
-                right: 1.5rem;
-                top: .825rem;
-                background: url('../../assets/images/login/show_password.png') no-repeat;
-                background-size: contain;
             input 
                 font-size: .7rem;
                 color: #49496A;
             &.account
+                input 
+                    border-bottom: 1px solid #F8F8F8;
+            &.password
                 input 
                     border-bottom: 1px solid #F8F8F8;
             .login_input
@@ -47,7 +40,7 @@
             text-align: center;
             line-height: 2.5rem;
             border-radius: 2.5rem;
-            margin-top: 3%;
+            margin-top: 1rem;
             &.active_btn
                 opacity: 1;
             span 
@@ -55,13 +48,14 @@
                 color: #fff;
                 font-size: .75rem;
         .control
-            margin-top: 2.7%;
-            width: 16.75rem;
-            display: flex;
-            justify-content: space-between;
-            div
-                font-size: .7rem;
-                color: #ACB3C7;        
+            margin-top: 1rem;
+            width: 16.9rem;
+            text-align: center;
+            font-size: .65rem;
+            color: #ACB3C7; 
+            span
+                color: #1F1F00; 
+
         .err_message
             width: 7.95rem;
             height: 1.9rem;
@@ -73,9 +67,15 @@
             font-size: .7rem;
             margin-top: .45rem;
         .footer
-            width: 16.75rem;
-            text-align: center;
-            font-size: .7rem;
-            color: #3D3BEE; 
             position: absolute;
-            bottom: 1.5rem;
+            width: 16.75rem;
+            text-align: left;
+            font-size: .7rem;
+            color: #49496A; 
+            top: 16.3rem;
+            font-size: .7rem;
+            line-height: 1rem;
+            h3
+                font-size: .7rem;
+            .content
+                color: #ACB3C7;

@@ -1,6 +1,37 @@
 <template>
   <div id="openAccount">
-      开户
+      <div class="main">
+        <div class="top">
+          为了您的资金安全，请务必输入您本人的身份证号和银行卡号码。
+        </div>
+        <div class="account login_input_box">
+          <input @keyup="checkName"  v-model="account" class="login_input" type="text" placeholder="请输入真是姓名">
+        </div>
+        <div class="password login_input_box">
+          <input maxlength="18" @keyup="checkPassword" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
+        </div>
+        
+        <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
+          <span>立即开户</span>
+        </div>
+        <div class="control">
+          注册账户代表您同意<span>《江西银行资金帐户服务第三方协议》</span>
+        </div>
+        <div v-show="errShow" class="err_message">
+          {{ errMessage }}
+        </div>
+        <div class="footer">
+          <h3>温馨提示</h3>
+          <div class="content">
+            1. 为了您的资金安全，江西银行电子交易账户采用资金
+            原卡进出设置，只能提现至您绑定的银行卡。所以请绑
+            定常用借记卡哦。<br/>
+            2. 二类银行卡账户每天转账限额1万元，建议您在帮卡
+            前核实是否为二类银行卡。
+          </div>
+          
+        </div>
+      </div>
   </div>
 </template>
 <script>
@@ -8,11 +39,61 @@ export default {
   name: 'openAccount',
   data () {
       return {
-          
+          account: '',
+          password: '',
+          errMessage: '手机号输入错误',
+          errShow: false,
+          checkPasswordBoolean: false,
+          activeBtn: false,
+          checkNameBoolean: false
       }
+  },
+  mounted(){
+    
+  },
+  methods: {
+    
+    hideDelete() {
+      this.delete_active = false
+      this.account = ''
+    },
+    loginMethod() {
+      if(this.activeBtn){
+        this.$router.push('/hy/infoCheck')
+      }
+    },
+    checkPassword() {
+      this.checkPasswordBoolean = this.commonJs.checkIdNum(this.password)
+      if(!this.checkPasswordBoolean){
+        this.errShow = true
+        this.errMessage = '身份证号不正确'
+      }else{
+        this.errShow = false
+      }
+      if(this.checkNameBoolean && this.checkPasswordBoolean){
+        this.activeBtn = true
+      }else{
+        this.activeBtn = false
+      }
+    },
+    checkName() {
+      this.checkNameBoolean = this.commonJs.checkRealName(this.account)
+      console.log(this.account)
+      if(!this.checkNameBoolean){
+        this.errShow = true
+        this.errMessage = '真实姓名不正确'
+      }else{
+        this.errShow = false
+      }
+      if(this.checkNameBoolean && this.checkPasswordBoolean){
+        this.activeBtn = true
+      }else{
+        this.activeBtn = false
+      }
+    }
   }
 }
 </script>
 <style lang="stylus" scoped>
-
+@import './openAccount.stylus';
 </style>

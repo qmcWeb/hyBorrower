@@ -23,6 +23,9 @@
         <div v-if="errShow" class="err_message">
           {{ errMessage }}
         </div>
+        <div class="footer" @click="$router.push('/hy/login')">
+          《钱满仓网站服务协议》
+        </div>
       </div>
   </div>
 </template>
@@ -60,11 +63,8 @@ export default {
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
     },
     checkNumMethod() {
-      if(this.password.length === 4){
-        this.checkNum = true
-      }else{
-        this.checkNum = false
-      }
+      this.checkNum = this.commonJs.passwordCheck(this.password)
+      
       if(this.checkNum && !this.errShow){
         this.activeBtn = true
       }else{

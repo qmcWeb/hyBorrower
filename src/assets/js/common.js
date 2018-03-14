@@ -47,5 +47,10 @@ export default {
             }
             
         }, obj.delay)
+    },
+    dealTelStr: function(str){
+        // 对手机号进行处理，返回类似138****8888形式账号
+        var strTemp = str.substring(3,7)
+        return str.replace(strTemp, '****')
     }
 }

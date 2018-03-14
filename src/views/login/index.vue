@@ -73,7 +73,7 @@ export default {
     },
     loginMethod() {
       if(this.checkNum && !this.errShow){
-        console.log('调用函数')
+        this.$router.push('/hy/accountCenter')
       }
     }
   },

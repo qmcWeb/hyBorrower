@@ -5,7 +5,7 @@
           为了您的资金安全，请务必输入您本人的身份证号和银行卡号码。
         </div>
         <div class="account login_input_box">
-          <input @keyup="checkName"  v-model="account" class="login_input" type="text" placeholder="请输入真是姓名">
+          <input v-on:blur='checkName' @keyup="checkName"  v-model="account" class="login_input" type="text" placeholder="请输入真是姓名">
         </div>
         <div class="password login_input_box">
           <input maxlength="18" @keyup="checkPassword" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">

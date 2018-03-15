@@ -85,7 +85,7 @@ export default {
   },
   mounted(){
     this.accountRight()
-    this.getCountDown()
+    
   },
   methods: {
     showPassword() {
@@ -203,15 +203,12 @@ export default {
     }
   },
   watch: {
-    account: {
+    showBoxNum: {
       handler: function(val, olderVal) {
         // 不要使用箭头函数
-        if(val){
-          this.delete_active = true
+        if(val === 2){
+          this.getCountDown()
           
-        }else{
-          this.delete_active = false
-          console.log(this.delete_active)
         }
         
       },

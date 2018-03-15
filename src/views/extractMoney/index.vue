@@ -16,7 +16,7 @@
           <div class="top">可提金额: 25680.98元</div>
           <div class="bottom">
             <span>￥</span>
-            <input type="text">
+            <input type="text" placeholder="请输入金额">
           </div>
         </div>
 
@@ -31,8 +31,8 @@
         </div>
 
         <div v-if="bigMoneyCard" class="big_money_card">
-          <div class="left">开户行行号</div>
-          <div class="card_id"><input type="text" placeholder="联系银行获取联行号并输入"></div>
+          <span class="left">开户行行号</span>
+          <input type="text" placeholder="联系银行获取联行号并输入">
         </div>
 
         <div class="extract_money_info">

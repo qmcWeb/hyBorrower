@@ -88,7 +88,7 @@ export default {
       this.checkPasswordBoolean = this.commonJs.passwordCheck(this.password)
       if(!this.checkPasswordBoolean){
         this.errShow = true
-        this.errMessage = '密码格式不正确'
+        this.errMessage = '密码长度为6至16位字母和数字组合'
       }else{
         this.errShow = false
       }

@@ -7,6 +7,7 @@ import Axios from 'axios'
 import VueWechatTitle from 'vue-wechat-title'
 
 import './assets/css/reset.css'
+import './assets/css/button.css'
 
 import commonJs from './assets/js/common.js'
 

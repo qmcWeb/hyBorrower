@@ -16,7 +16,7 @@
         <div class="middle_box">
           <div class="tip">
             借款放贷前，请先开通银行存管并授权还款
-            <span class="question_img"></span>
+            <span @click="questionMethod" class="question_img"></span>
           </div>
 
           <div class="user_all_info">
@@ -69,7 +69,7 @@ export default {
           blankBoolean: true,
           tradeBoolean: true,
           repeamentBoolean: true,
-          boxBoolean: true
+          boxBoolean: false
       }
   },
   mounted(){
@@ -95,6 +95,9 @@ export default {
     shadowBoxData(val) {
       console.log(val)
       this.boxBoolean = val
+    },
+    questionMethod() {
+      this.boxBoolean = true
     }
   },
   watch: {

@@ -49,7 +49,7 @@
             提现
           </div>
         </div>
-        <shadow-box @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
+        <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
       </div>
       
   </div>
@@ -69,7 +69,11 @@ export default {
           blankBoolean: true,
           tradeBoolean: true,
           repeamentBoolean: true,
-          boxBoolean: false
+          boxBoolean: false,
+          dataChild: {
+            title: '开户及授权说明',
+            containerBoolean: true
+          }
       }
   },
   mounted(){

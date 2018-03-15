@@ -57,23 +57,36 @@
         <div class="extract_info">
           提现说明
         </div>
-
+         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
       </div>
   </div>
 </template>
 <script>
+import ShadowBox from '../accountCenter/shadow_box'
 export default {
   name: 'extractMoney',
+  components: {
+    ShadowBox
+  },
   data () {
       return {
           bigMoneyCard: false,
-          blankImg: './static/images/blankLogo/ABC.png'
+          blankImg: './static/images/blankLogo/ABC.png',
+          boxBoolean: false,
+          dataChild: {
+            title: '提示',
+            containerBoolean: false
+          }
       }
   },
   methods: {
     toggleTap() {
       this.bigMoneyCard = !this.bigMoneyCard
-    }
+      this.boxBoolean = this.bigMoneyCard
+    },
+    shadowBoxData(val) {
+      this.boxBoolean = val
+    },
   }
 }
 </script>

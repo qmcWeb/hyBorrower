@@ -10,7 +10,7 @@ import AccountCenter from '../views/accountCenter/index.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/hy/login',
@@ -70,3 +70,14 @@ export default new Router({
     }
   ]
 })
+
+// router.beforeEach((to, from, next) => {
+
+// })
+// router.afterEach((to, from, next) => {
+
+// })
+
+
+
+export default router

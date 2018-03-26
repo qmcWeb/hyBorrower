@@ -7,6 +7,7 @@ import OpenAccount from '../views/register/openAccount.vue'
 import ResetPassword from '../views/resetPassword/index.vue'
 import ExtractMoney from '../views/extractMoney/index.vue'
 import AccountCenter from '../views/accountCenter/index.vue'
+import store from '../vuex/store'
 
 Vue.use(Router)
 
@@ -71,9 +72,10 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-
-// })
+router.beforeEach((to, from, next) => {
+  store.commit('changeLoading', true)
+  next()
+})
 // router.afterEach((to, from, next) => {
 
 // })

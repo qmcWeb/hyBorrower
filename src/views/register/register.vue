@@ -2,7 +2,7 @@
   <div id="register">
       <div class="main">
         <div class="account login_input_box">
-          <input v-on:blur='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+          <input @keyup='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
@@ -10,7 +10,7 @@
           <span class="show_password" @click="showPassword"></span>
         </div>
         <div class="check_input login_input_box">
-          <input @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
+          <input @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">
           <span class="show_check_img" @click="getImgCode">
             <img :src="imgCode" alt="">
           </span>
@@ -31,6 +31,8 @@
   </div>
 </template>
 <script>
+// 引入vuex
+import { mapActions } from 'vuex'
 export default {
   name: 'register',
   data () {
@@ -45,14 +47,17 @@ export default {
           checkPasswordBoolean: false,
           checkNum: false,
           activeBtn: false,
-          imgCode: ''
+          imgCode: '',
+          accountBoolean: false
       }
   },
   mounted(){
-    this.accountRight()
     this.getImgCode()
   },
   methods: {
+    ...mapActions([
+      'changeLoading'
+    ]),
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
@@ -66,6 +71,12 @@ export default {
     },
     accountRight() {
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
+      this.accountBoolean = this.commonJs.isPoneAvailable(this.account)
+      if(this.checkNum&&this.checkPasswordBoolean&&this.accountBoolean){
+        this.activeBtn = true
+      }else{
+        this.activeBtn = false
+      }
     },
     checkNumMethod() {
       if(this.checkNumCon.length === 4){
@@ -76,20 +87,20 @@ export default {
         this.errShow = true
         this.errMessage = '验证码不正确'
       }
-      if(this.checkNum && !this.errShow&&this.checkPasswordBoolean){
+      if(this.checkNum&&this.checkPasswordBoolean&&this.accountBoolean){
         this.activeBtn = true
       }else{
         this.activeBtn = false
       }
     },
     loginMethod() {
-      this.$router.push({path: '/hy/infoCheck', query: {telNum: this.account}})
-      if(this.checkNum && !this.errShow&&this.checkPasswordBoolean){
-        this.$router.push('/hy/infoCheck')
+      this.$router.push({path: '/infoCheck', query: {telNum: this.account}})
+      if(this.activeBtn){
+        this.$router.push('/infoCheck')
       }
     },
     registerPort(){
-      this.$http.post('/app /platform/registFirst', {
+      this.$http.post(this.api + '/app /platform/registFirst', {
         params: {
           mobileNum: this.account,
           password: this.password
@@ -104,7 +115,7 @@ export default {
       }else{
         this.errShow = false
       }
-      if(this.checkNum && !this.errShow&&this.checkPasswordBoolean){
+      if(this.checkNum&&this.checkPasswordBoolean&&this.accountBoolean){
         this.activeBtn = true
       }else{
         this.activeBtn = false
@@ -113,7 +124,9 @@ export default {
     getImgCode(){
       this.$http.get(this.api + '/app/platform/getImgCodeUrl').then((data) => {
         if(data.data && data.data.code === '200'){
+          this.$store.commit('changeLoading', false)
           this.imgCode = data.data.databody.imgCodeUrl + '?' + new Date()
+
         }
       })
     }

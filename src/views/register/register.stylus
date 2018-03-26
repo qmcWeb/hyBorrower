@@ -1,4 +1,4 @@
-#infoCheck
+#register
     background-color:  #F8F8F8;
     height: 100%;
     .main
@@ -8,46 +8,43 @@
         padding-top: .5rem;
         height: 100%;
         position: relative;
-        .top
-            font-size: .7rem;
-            color: #49496A;
-            width: 100%;
-            padding: 0 .75rem;
-            box-sizing: border-box;
-            
-            .left
-                text-align: left;
-                width: 100%;
-            .center
-                font-size: .9rem;
-                text-align: center;
-                margin: .5rem 0;
-
         .login_input_box
             width: 100%;
             box-sizing: border-box;
             padding: 0 .75rem;
             background-color: #fff;
             position: relative;
+            .delete_active 
+                position: absolute;
+                width: 20px;
+                height 20px;
+                right: 1.5rem;
+                top: .825rem;
+                background: url('../../assets/images/login/account_delete.png') no-repeat;
+            .show_password
+                position: absolute;
+                width: 20px;
+                height 20px;
+                right: 1.5rem;
+                top: .825rem;
+                background: url('../../assets/images/login/show_password.png') no-repeat;
+                background-size: contain;
             input 
                 font-size: .7rem;
                 color: #49496A;
+            &.account
+                input 
+                    border-bottom: 1px solid #F8F8F8;
+            &.password
+                input 
+                    border-bottom: 1px solid #F8F8F8;
             .login_input
                 width: 100%;
                 border: 0; 
-                height: 2.6rem;
-            .show_check_num
-                position: absolute;
-                width: 4.6rem;
-                height 1.5rem;
-                line-height: 1.5rem;
-                text-align: center;
-                color: #fff;
-                font-size: .6rem;
-                right: 1.5rem;
-                top: .825rem;
-                background-color: #ACB3C7;
-                border-radius: 1.5rem;
+                height: 2.6rem; 
+            .show_check_img
+                widht: 3rem;
+                height: 1rem;
         .login_btn
             width: 16.75rem;
             height: 2.5rem;

@@ -72,6 +72,17 @@ export default {
       }
     },
     loginMethod() {
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/login',
+        params: {
+          loginType: 0,
+          loginName: 'm_18888776655',
+          password: 'a123456'
+        }
+      }).then((data) => {
+        console.log(data)
+      })
       if(this.checkNum && !this.errShow){
         this.$router.push('/hy/accountCenter')
       }

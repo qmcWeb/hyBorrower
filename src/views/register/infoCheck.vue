@@ -95,5 +95,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './infoCheck.stylus';
+@import './infoCheck.styl';
 </style>

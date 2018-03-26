@@ -33,7 +33,7 @@ export default {
   name: 'register',
   data () {
       return {
-          account: '1',
+          account: '',
           password: '',
           checkNumCon: '',
           delete_active: true,
@@ -43,6 +43,7 @@ export default {
           checkPasswordBoolean: false,
           checkNum: false,
           activeBtn: false
+
       }
   },
   mounted(){
@@ -83,6 +84,14 @@ export default {
       if(this.checkNum && !this.errShow&&this.checkPasswordBoolean){
         this.$router.push('/hy/infoCheck')
       }
+    },
+    registerPort(){
+      this.$http.post('/app /platform/registFirst', {
+        params: {
+          mobileNum: this.account,
+          password: this.password
+        }
+      })
     },
     checkPassword() {
       this.checkPasswordBoolean = this.commonJs.passwordCheck(this.password)

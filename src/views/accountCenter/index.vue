@@ -39,7 +39,7 @@
               <div class="control">
                 <span v-if="repeamentBoolean" class="control_text">已授权</span>
                 <span v-else class="control_btn" :class="{unable_btn: !tradeBoolean}">去授权</span>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
@@ -51,7 +51,7 @@
         </div>
         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
       </div>
-      
+
   </div>
 </template>
 <script>
@@ -63,7 +63,7 @@ export default {
   },
   data () {
       return {
-          userName: '13889386888', 
+          userName: '13889386888',
           activeBtn: false,
           ableMoney: '10.50',
           blankBoolean: true,
@@ -105,10 +105,10 @@ export default {
     }
   },
   watch: {
-    
+
   }
 }
 </script>
 <style lang="stylus" scoped>
-@import './accountCenter.stylus';
+@import './accountCenter.styl';
 </style>

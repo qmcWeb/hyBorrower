@@ -124,12 +124,12 @@ export default {
         // 不要使用箭头函数
         if(val){
           this.delete_active = true
-          
+
         }else{
           this.delete_active = false
           console.log(this.delete_active)
         }
-        
+
       },
       deep: true
     }
@@ -137,5 +137,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './register.stylus';
+@import './register.styl';
 </style>

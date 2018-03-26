@@ -13,15 +13,15 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     {
-      path: '/hy/login',
+      path: '/login',
       name: '登录',
       component: Login,
-      meta: { 
+      meta: {
         title: '登录'
        }
     },
     {
-      path: '/hy/register',
+      path: '/register',
       name: '注册',
       component: Register,
       meta: {
@@ -29,7 +29,7 @@ const router = new Router({
       }
     },
     {
-      path: '/hy/infoCheck',
+      path: '/infoCheck',
       name: '短信验证',
       component: InfoCheck,
       meta: {
@@ -37,7 +37,7 @@ const router = new Router({
       }
     },
     {
-      path: '/hy/openAccount',
+      path: '/openAccount',
       name: '开户',
       component: OpenAccount,
       meta: {
@@ -45,7 +45,7 @@ const router = new Router({
       }
     },
     {
-      path: '/hy/resetPassword',
+      path: '/resetPassword',
       name: '重置密码',
       component: ResetPassword,
       meta: {
@@ -53,7 +53,7 @@ const router = new Router({
       }
     },
     {
-      path: '/hy/extractMoney',
+      path: '/extractMoney',
       name: '提现',
       component: ExtractMoney,
       meta: {
@@ -61,7 +61,7 @@ const router = new Router({
       }
     },
     {
-      path: '/hy/accountCenter',
+      path: '/accountCenter',
       name: '我的账户',
       component: AccountCenter,
       meta: {

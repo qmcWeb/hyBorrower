@@ -91,5 +91,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './extractMoney.stylus';
+@import './extractMoney.styl';
 </style>

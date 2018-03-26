@@ -64,7 +64,7 @@ export default {
     },
     checkNumMethod() {
       this.checkNum = this.commonJs.passwordCheck(this.password)
-      
+
       if(this.checkNum && !this.errShow){
         this.activeBtn = true
       }else{
@@ -94,18 +94,18 @@ export default {
         // 不要使用箭头函数
         if(val){
           this.delete_active = true
-          
+
         }else{
           this.delete_active = false
           console.log(this.delete_active)
         }
-        
+
       },
       deep: true
     }
   }
 }
 </script>
-<style lang="stylus" scoped>
-@import './login.stylus';
+<style lang="stylus" rel="stylesheet/stylus" scoped>
+@import 'login.styl';
 </style>

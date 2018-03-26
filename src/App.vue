@@ -1,13 +1,24 @@
 <template>
-  <div id="app">
+  <div id="app" v-loading='loading'>
     <div v-wechat-title='$route.meta.title'></div>
     <router-view/>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      
+    }
+  },
+  computed: {
+    ...mapState([
+      'loading'
+    ])
+  }
 }
 </script>
 

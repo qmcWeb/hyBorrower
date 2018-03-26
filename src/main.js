@@ -11,7 +11,6 @@ import './assets/css/button.css'
 
 import commonJs from './assets/js/common.js'
 
-
 Vue.config.productionTip = false
 Vue.use(VueWechatTitle)
 Vue.prototype.commonJs = commonJs

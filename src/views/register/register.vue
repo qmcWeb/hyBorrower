@@ -11,7 +11,9 @@
         </div>
         <div class="check_input login_input_box">
           <input @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
-          <span class="show_check_img"></span>
+          <span class="show_check_img" @click="getImgCode">
+            <img :src="imgCode" alt="">
+          </span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>注册</span>
@@ -42,12 +44,13 @@ export default {
           errShow: false,
           checkPasswordBoolean: false,
           checkNum: false,
-          activeBtn: false
-
+          activeBtn: false,
+          imgCode: ''
       }
   },
   mounted(){
     this.accountRight()
+    this.getImgCode()
   },
   methods: {
     showPassword() {
@@ -106,6 +109,13 @@ export default {
       }else{
         this.activeBtn = false
       }
+    },
+    getImgCode(){
+      this.$http.get(this.api + '/app/platform/getImgCodeUrl').then((data) => {
+        if(data.data && data.data.code === '200'){
+          this.imgCode = data.data.databody.imgCodeUrl + '?' + new Date()
+        }
+      })
     }
   },
   watch: {

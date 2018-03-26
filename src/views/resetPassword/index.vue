@@ -16,7 +16,7 @@
               <div class="step_bottom">重置密码</div>
             </div>
           </div>
-        
+
         </div>
         <div v-if="showBoxNum === 1" class="first common">
           <div class="account login_input_box">
@@ -27,7 +27,7 @@
             <input maxlength="4" @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
             <span class="show_check_img"></span>
           </div>
-          
+
         </div>
 
         <div v-if="showBoxNum === 2" class="second common">
@@ -36,9 +36,9 @@
             <input maxlength="6" @keyup="checkInfoNumMethod"   v-model="checkInfoNum" class="login_input" type="text" placeholder="短信验证码">
             <span @click="getAgainCount" class="show_check_num">{{ countNum }}</span>
           </div>
-          
+
         </div>
-        
+
         <div v-if="showBoxNum === 3" class="third common">
           <div class="first_password login_input_box">
             <input maxlength="16" @keyup="firstPasswordMethod"   v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
@@ -46,9 +46,9 @@
           <div class="second_password login_input_box">
             <input maxlength="16" @keyup="secondPasswordMethod"   v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">
           </div>
-          
+
         </div>
-        
+
 
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>{{ btnInfo }}</span>
@@ -56,7 +56,7 @@
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
         </div>
-        
+
       </div>
   </div>
 </template>
@@ -85,7 +85,7 @@ export default {
   },
   mounted(){
     this.accountRight()
-    
+
   },
   methods: {
     showPassword() {
@@ -208,9 +208,9 @@ export default {
         // 不要使用箭头函数
         if(val === 2){
           this.getCountDown()
-          
+
         }
-        
+
       },
       deep: true
     }
@@ -218,5 +218,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './resetPassword.stylus';
+@import './resetPassword.styl';
 </style>

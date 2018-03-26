@@ -10,7 +10,7 @@
         <div class="password login_input_box">
           <input maxlength="18" @keyup="checkPassword" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
         </div>
-        
+
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>立即开户</span>
         </div>
@@ -29,7 +29,7 @@
             2. 二类银行卡账户每天转账限额1万元，建议您在帮卡
             前核实是否为二类银行卡。
           </div>
-          
+
         </div>
       </div>
   </div>
@@ -49,10 +49,10 @@ export default {
       }
   },
   mounted(){
-    
+
   },
   methods: {
-    
+
     hideDelete() {
       this.delete_active = false
       this.account = ''
@@ -95,5 +95,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './openAccount.stylus';
+@import './openAccount.styl';
 </style>

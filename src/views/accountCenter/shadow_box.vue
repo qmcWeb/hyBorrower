@@ -1,6 +1,6 @@
 <template>
   <div id="shadowBox">
-      
+
       <div class="main">
           <div class="content" :class="{active_content: !containerShow.containerBoolean}">
               <h3>{{ containerShow.title }}</h3>
@@ -29,7 +29,7 @@ export default {
   props: ['containerShow'],
   data () {
       return {
-          
+
       }
   },
   methods: {
@@ -40,5 +40,5 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-@import './shadow_box.stylus'
+@import './shadow_box.styl'
 </style>

@@ -52,5 +52,22 @@ export default {
         // 对手机号进行处理，返回类似138****8888形式账号
         var strTemp = str.substring(3,7)
         return str.replace(strTemp, '****')
+    },
+    getCookieByArray: function (name) {
+        // 获取cookie
+        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+
+        return v ? v[2] : null;
+
+    },
+    setCookie: function (name, value, days) {
+        // 设置cookie
+        var d = new Date;
+        d.setTime(d.getTime() + 24*60*60*1000*days);
+        window.document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+    },
+    deleteCookie: function (name) {
+        // 删除cookie
+        this.set(name, '', -1);
     }
 }

@@ -10,6 +10,7 @@
         <div class="password login_input_box">
           <input maxlength="18" @keyup="checkPassword" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
         </div>
+        
 
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>立即开户</span>
@@ -32,9 +33,13 @@
 
         </div>
       </div>
+      <div v-html="pageData">
+          {{ pageData }}
+      </div>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'openAccount',
   data () {
@@ -45,12 +50,22 @@ export default {
           errShow: false,
           checkPasswordBoolean: false,
           activeBtn: false,
-          checkNameBoolean: false
+          checkNameBoolean: false,
+          pageData: '',
+          dataShow: true
       }
   },
-  mounted(){
-
+  computed: {
+    ...mapState([
+      'token'
+    ])
   },
+  mounted(){
+    this.$store.commit('changeLoading', false)
+  },
+  // updated (){
+  //   // console.log(1,document.getElementById("frm1"))
+  // },
   methods: {
 
     hideDelete() {
@@ -58,8 +73,37 @@ export default {
       this.account = ''
     },
     loginMethod() {
+      
       if(this.activeBtn){
-        this.$router.push('/hy/infoCheck')
+        this.$store.commit('changeLoading', true)
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/fdep/user/accountOpenPage',
+          params: {
+            token: this.token,
+            realName: this.account,
+            IDCard: this.password
+          },
+          withCredentials: true
+        }).then(data => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.pageData = data.data.dataBody.accountOpen
+            this.$nextTick(() => {
+              this.$store.commit('changeLoading', false)
+              document.getElementById("frm1").submit()
+            })
+           
+          }else{
+            this.errShow = true
+            this.errMessage = data.data.message
+            this.$store.commit('changeLoading', false)
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
+        
       }
     },
     checkPassword() {

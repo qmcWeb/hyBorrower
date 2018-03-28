@@ -2,7 +2,7 @@
   <div id="login">
       <div class="main">
         <div class="account login_input_box">
-          <input v-on:blur='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+          <input @keyup='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)"  v-model="account"  class="login_input" type="number" placeholder="手机号／用户名">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
@@ -13,28 +13,29 @@
           <span>同意协议并登录</span>
         </div>
         <div class="control">
-          <div class="register" @click="$router.push('/hy/register')">
+          <div class="register" @click="$router.push('/register')">
             注册
           </div>
-          <div class="reset_password" @click="$router.push('/hy/resetPassword')">
+          <div class="reset_password" @click="$router.push('/resetPassword')">
             忘记密码?
           </div>
         </div>
         <div v-if="errShow" class="err_message">
           {{ errMessage }}
         </div>
-        <div class="footer" @click="$router.push('/hy/login')">
+        <div class="footer" @click="$router.push('/login')">
           《钱满仓网站服务协议》
         </div>
       </div>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'login',
   data () {
       return {
-          account: '1',
+          account: '',
           password: '',
           delete_active: true,
           passwordType: 'password',
@@ -44,10 +45,19 @@ export default {
           activeBtn: false
       }
   },
+  computed: {
+    ...mapState([
+      'token'
+    ])
+  },
   mounted(){
-    this.accountRight()
+    this.$store.commit('changeLoading', false)
   },
   methods: {
+    ...mapActions([
+      'changeLoading',
+      'changeUser'
+    ]),
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
@@ -61,30 +71,47 @@ export default {
     },
     accountRight() {
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
+      this.accountBoolean = this.commonJs.isPoneAvailable(this.account)
+      if(this.checkNum && this.accountBoolean){
+        this.activeBtn = true
+      }else{
+        this.activeBtn = false
+      }
     },
     checkNumMethod() {
       this.checkNum = this.commonJs.passwordCheck(this.password)
 
-      if(this.checkNum && !this.errShow){
+      if(this.checkNum && this.accountBoolean){
         this.activeBtn = true
       }else{
         this.activeBtn = false
       }
     },
     loginMethod() {
-      this.$http({
-        method: 'post',
-        url: this.api + '/app/platform/login',
-        params: {
-          loginType: 0,
-          loginName: 'm_18888776655',
-          password: 'a123456'
-        }
-      }).then((data) => {
-        console.log(data)
-      })
-      if(this.checkNum && !this.errShow){
-        this.$router.push('/hy/accountCenter')
+      
+      if(this.activeBtn){
+        this.$store.commit('changeLoading', true)
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/platform/loginLoaner',
+          params: {
+            loginName: this.account,
+            password: this.password
+          }
+        }).then((data) => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.$store.commit('changeUser', data.data.dataBody)
+            this.$router.push('/accountCenter')
+          }else{
+            this.errShow = true
+            this.errMessage = data.data.message
+            this.$store.commit('changeLoading', false)
+          }
+        }).catch((err) => {
+          console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
       }
     }
   },

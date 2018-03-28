@@ -134,7 +134,7 @@ export default {
         this.btnInfo = '重置密码'
         this.activeBtn = false
       } else if(this.activeBtn && this.showBoxNum === 3){
-        this.$router.push('/hy/accountCenter')
+        this.$router.push('/accountCenter')
       }
     },
     getCountDown() {

@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-loading='loading'>
-    <div v-wechat-title='$route.meta.title'></div>
-    <router-view/>
+    <!-- <div v-wechat-title='$route.meta.title'></div> -->
+    <router-view />
   </div>
 </template>
 

@@ -6,9 +6,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'App',
-  created:function () {
+  data () {
+    return {
+      
+    }
+  },
+  computed: {
+    ...mapState([
+      'loading'
+    ])
   }
 }
 </script>

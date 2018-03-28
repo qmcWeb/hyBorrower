@@ -45,7 +45,8 @@ export default {
       }
   },
   mounted(){
-    this.accountRight()
+    this.accountRight();
+    console.log(2222222222222222)
   },
   methods: {
     showPassword() {

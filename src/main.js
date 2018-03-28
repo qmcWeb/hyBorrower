@@ -13,7 +13,6 @@ import './assets/css/reset.css'
 import './assets/css/button.css'
 
 import commonJs from './assets/js/common.js'
-
 Vue.config.productionTip = false
 Vue.use(VueWechatTitle)
 Vue.use(ElementUI)

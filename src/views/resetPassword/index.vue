@@ -25,7 +25,9 @@
           </div>
           <div class="check_input login_input_box">
             <input maxlength="4" @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
-            <span class="show_check_img"></span>
+            <span class="show_check_img" @click="getImgCode">
+              <img :src="imgCode" alt="">
+            </span>
           </div>
 
         </div>
@@ -61,6 +63,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'resetPassword',
   data () {
@@ -81,13 +84,17 @@ export default {
           secondPasswordBoolean: false,
           firstPassword: '',
           secondPassword: '',
+          imgCode: ''
       }
   },
   mounted(){
     this.accountRight()
-
+    this.getImgCode()
   },
   methods: {
+    ...mapActions([
+      'changeLoading',
+    ]),
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
@@ -200,6 +207,30 @@ export default {
       }else{
         this.activeBtn = false
       }
+    },
+    getImgCode(){
+      
+      this.$http({
+        method: 'get',
+        url: this.api + '/verifyCodeServlet', 
+        withCredentials: true,
+        responseType: 'arraybuffer',
+        proxy: {
+          host: 'http://218.247.190.158',
+          port: 17774
+        }
+      }).then(response => {
+        return 'data:image/png;base64,' + btoa(
+        new Uint8Array(response.data)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+      }).then((data) => {
+        console.log(data)
+        this.imgCode = data
+        //this.$store.commit('changeLoading', false)
+      }).catch((response) => {
+        //this.$store.commit('changeLoading', false)
+      })
     }
   },
   watch: {

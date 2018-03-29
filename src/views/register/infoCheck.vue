@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'infoCheck',
   data () {
@@ -38,12 +39,19 @@ export default {
           countNum: '60s'
       }
   },
+  computed: {
+    ...mapState([
+      'registerUser'
+    ])
+  },
   mounted(){
     this.getCountDown()
     this.getInfo()
   },
   methods: {
-   
+    ...mapActions([
+      'changeLoading'
+    ]),
     checkNumMethod() {
       if(this.checkNumCon.length === 6){
         this.checkNum = true
@@ -60,9 +68,34 @@ export default {
       }
     },
     loginMethod() {
-      this.$router.push('/hy/openAccount')
-      if(this.checkNum && !this.errShow&&this.checkPasswordBoolean){
-        this.$router.push('/hy/openAccount')
+      console.log(this.registerUser)
+      if(this.activeBtn){
+        this.$store.commit('changeLoading', true)
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/platform/registTwo',
+          withCredentials: true,
+          params: {
+            mobileNum: this.registerUser.mobile,
+            password: this.registerUser.password,
+            authCode: this.checkNumCon,
+            source: 'huiyin'
+          }
+        }).then((data) => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.$router.push('/openAccount')
+            this.$store.commit('changeUser', Object.assign({}, data.data.dataBody, {mobile: this.registerUser.mobile}))
+          }else{
+            this.errShow = true
+            this.errMessage = data.data.message
+            this.$store.commit('changeLoading', false)
+          }
+        }).catch(err => {
+          console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
+        
       }
     },
     getCountDown() {
@@ -82,13 +115,28 @@ export default {
     getAgainCount() {
       if(this.countNum === '重新获取'){
         this.getCountDown()
+        this.getInfoAgain()
       }
     },
+    getInfoAgain(){
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/registOne',
+        params: {
+          mobileNum: this.registerUser.mobile,
+          password: this.registerUser.password,
+          captchaImg: this.registerUser.captchamImg
+        },
+        withCredentials: true
+      }).then((data) => {
+        console.log(data)
+        
+      })
+    },
     getInfo() {
-      console.log(this.$route.query.telNum)
       var str = this.$route.query.telNum.substring(3,7)
-      console.log(str)
       this.telphoneNum = this.$route.query.telNum.replace(str, '****')
+      this.$store.commit('changeLoading', false)
     }
     
   }

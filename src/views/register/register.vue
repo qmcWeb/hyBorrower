@@ -24,7 +24,7 @@
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
         </div>
-        <div class="footer" @click="$router.push('/hy/login')">
+        <div class="footer" @click="$router.push('/login')">
           已有账号?请登录
         </div>
       </div>
@@ -56,7 +56,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'changeLoading'
+      'changeLoading',
+      'changeRegisterUser'
     ]),
     showPassword() {
       if(this.passwordType === 'password'){
@@ -94,18 +95,42 @@ export default {
       }
     },
     loginMethod() {
-      this.$router.push({path: '/infoCheck', query: {telNum: this.account}})
       if(this.activeBtn){
-        this.$router.push('/infoCheck')
+        this.$store.commit('changeLoading', true)
+        this.$store.commit('changeRegisterUser', {
+          mobile: this.account,
+          password: this.password,
+          captchamImg: this.checkNumCon
+        })
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/platform/registOne',
+          params: {
+            mobileNum: this.account,
+            password: this.password,
+            captchaImg: this.checkNumCon
+          },
+          withCredentials: true
+        }).then((data) => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.$router.push({path: '/infoCheck', query: {telNum: this.account}})
+          }else{
+            this.errShow = true
+            this.errMessage = data.data.message
+            this.$store.commit('changeLoading', false)
+          }
+        }).catch((err) => {
+          this.$store.commit('changeLoading', false)
+          this.errShow = true
+          this.errMessage = '输入有误'
+          console.log(err)
+        })
+        
       }
     },
     registerPort(){
-      this.$http.post(this.api + '/app /platform/registFirst', {
-        params: {
-          mobileNum: this.account,
-          password: this.password
-        }
-      })
+      
     },
     checkPassword() {
       this.checkPasswordBoolean = this.commonJs.passwordCheck(this.password)
@@ -122,12 +147,27 @@ export default {
       }
     },
     getImgCode(){
-      this.$http.get(this.api + '/app/platform/getImgCodeUrl').then((data) => {
-        if(data.data && data.data.code === '200'){
-          this.$store.commit('changeLoading', false)
-          this.imgCode = data.data.databody.imgCodeUrl + '?' + new Date()
-
+      
+      this.$http({
+        method: 'get',
+        url: this.api + '/verifyCodeServlet', 
+        withCredentials: true,
+        responseType: 'arraybuffer',
+        proxy: {
+          host: 'http://218.247.190.158',
+          port: 17774
         }
+      }).then(response => {
+        return 'data:image/png;base64,' + btoa(
+        new Uint8Array(response.data)
+            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+      }).then((data) => {
+        console.log(data)
+        this.imgCode = data
+        this.$store.commit('changeLoading', false)
+      }).catch((response) => {
+        this.$store.commit('changeLoading', false)
       })
     }
   },

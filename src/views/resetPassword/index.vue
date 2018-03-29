@@ -68,7 +68,7 @@ export default {
   name: 'resetPassword',
   data () {
       return {
-          account: '13567567675',
+          account: '',
           checkNumCon: '',
           delete_active: true,
           errMessage: '手机号输入错误',
@@ -91,9 +91,15 @@ export default {
     this.accountRight()
     this.getImgCode()
   },
+  computed: {
+    ...mapState([
+      'resetPassword'
+    ])
+  },
   methods: {
     ...mapActions([
       'changeLoading',
+      'changeResetPassword'
     ]),
     showPassword() {
       if(this.passwordType === 'password'){
@@ -132,17 +138,101 @@ export default {
     },
     loginMethod() {
       if(this.showBoxNum === 1 && this.activeBtn === true){
-        this.showBoxNum++
-        var str = this.account.substring(3,7)
-        this.accountFilter = this.account.replace(str, '****')
-        this.activeBtn = false
+        this.firstLogin()
       }else if(this.activeBtn && this.showBoxNum === 2){
-        this.showBoxNum++
-        this.btnInfo = '重置密码'
-        this.activeBtn = false
+        this.secondLogin()
       } else if(this.activeBtn && this.showBoxNum === 3){
-        this.$router.push('/accountCenter')
+        this.thirdLogin()
       }
+    },
+    firstLogin(){
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWGCode',
+        params: {
+          imgCode: this.checkNumCon,
+          mobile: this.account
+        }
+      }).then((data) => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.showBoxNum++
+          var str = this.account.substring(3,7)
+          this.accountFilter = this.account.replace(str, '****')
+          this.activeBtn = false
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+        }
+        this.$store.commit('changeLoading', false)
+      }).catch(err => {
+        console.log(err)
+         this.$store.commit('changeLoading', false)
+      })
+    },
+    secondLogin(){
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWVCode',
+        params: {
+          mobile: this.account,
+          captchaMobile: this.checkInfoNum
+        }
+      }).then(data => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.showBoxNum++
+          this.btnInfo = '重置密码'
+          this.activeBtn = false
+          this.$store.commit('changeResetPassword', data.data.dataBody || {})
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+        }
+        this.$store.commit('changeLoading', false)
+      }).catch(err => {
+        console.log(err)
+         this.$store.commit('changeLoading', false)
+      })
+    },
+    thirdLogin() {
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPW',
+        params: {
+          password: this.firstPassword,
+          rePassword: this.secondPassword,
+          resetPWToken: this.resetPassword.resetPWToken,
+          mobile: this.account
+        }
+      }).then(data => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.$router.push('/login')
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+          this.$store.commit('changeLoading', false)
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$store.commit('changeLoading', false)
+      })
+    },
+    getInfoCodeAgain() {
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWGCode',
+        params: {
+          imgCode: this.checkNumCon,
+          mobile: this.account
+        }
+      }).then((data) => {
+        console.log(data)
+      })
     },
     getCountDown() {
       var that = this
@@ -161,6 +251,7 @@ export default {
     getAgainCount() {
       if(this.countNum === '重新获取'){
         this.getCountDown()
+        this.getInfoCodeAgain()
       }
     },
     checkInfoNumMethod() {
@@ -209,28 +300,7 @@ export default {
       }
     },
     getImgCode(){
-      
-      this.$http({
-        method: 'get',
-        url: this.api + '/verifyCodeServlet', 
-        withCredentials: true,
-        responseType: 'arraybuffer',
-        proxy: {
-          host: 'http://218.247.190.158',
-          port: 17774
-        }
-      }).then(response => {
-        return 'data:image/png;base64,' + btoa(
-        new Uint8Array(response.data)
-            .reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
-      }).then((data) => {
-        console.log(data)
-        this.imgCode = data
-        //this.$store.commit('changeLoading', false)
-      }).catch((response) => {
-        //this.$store.commit('changeLoading', false)
-      })
+      this.commonJs.getCommonImgCode(this)
     }
   },
   watch: {

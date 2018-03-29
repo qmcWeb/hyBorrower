@@ -1,4 +1,27 @@
 export default {
+    getCommonImgCode: function(vueObj){
+        vueObj.$http({
+            method: 'get',
+            url: vueObj.api + '/verifyCodeServlet', 
+            withCredentials: true,
+            responseType: 'arraybuffer',
+            proxy: {
+                host: 'http://218.247.190.158',
+                port: 17774
+            }
+        }).then(response => {
+            return 'data:image/png;base64,' + btoa(
+            new Uint8Array(response.data)
+                .reduce((data, byte) => data + String.fromCharCode(byte), '')
+            );
+        }).then((data) => {
+            console.log(data)
+            vueObj.imgCode = data
+            vueObj.$store.commit('changeLoading', false)
+        }).catch((response) => {
+            vueObj.$store.commit('changeLoading', false)
+        })
+    },
     isPoneAvailable: function (str) { 
         // 手机号验证 
         var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;  
@@ -69,5 +92,11 @@ export default {
     deleteCookie: function (name) {
         // 删除cookie
         this.set(name, '', -1);
+    },
+    getTimeNow: function() {
+        const timeNow = new Date()
+        return {
+            hours: timeNow.getHours()
+        }
     }
 }

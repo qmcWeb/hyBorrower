@@ -8,15 +8,15 @@
               <img :src="blankImg" alt="">
             </span>
             <span>中国工商银行</span>
-            <span class="card_id">(尾号6699)</span>
+            <span class="card_id">(尾号{{ bankNum }})</span>
           </div>
         </div>
 
         <div class="money">
-          <div class="top">可提金额: 25680.98元</div>
+          <div class="top">可提金额: {{ canUseMoney }}元</div>
           <div class="bottom">
             <span>￥</span>
-            <input type="text" placeholder="请输入金额">
+            <input type="number" v-model="moenyCash" placeholder="请输入金额">
           </div>
         </div>
 
@@ -32,7 +32,7 @@
 
         <div v-if="bigMoneyCard" class="big_money_card">
           <span class="left">开户行行号</span>
-          <input type="text" placeholder="联系银行获取联行号并输入">
+          <input type="text" v-model="openAccountCard" placeholder="联系银行获取联行号并输入">
         </div>
 
         <div class="extract_money_info">
@@ -42,11 +42,11 @@
           </div>
           <div class="bottom common">
             <div class="left">预计到账时间:</div>
-            <div class="right">每日到账,最晚T+1</div>
+            <div class="right">{{ withdrawMessage }}</div>
           </div>
         </div>
 
-        <div class="extract_btn">
+        <div class="extract_btn" @click="goWithdraw">
           提现
         </div>
 
@@ -57,11 +57,18 @@
         <div class="extract_info">
           提现说明
         </div>
-         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
+        <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
+        <div v-show="errShow" class="err_message">
+          {{ errMessage }}
+        </div>
+      </div>
+      <div v-html='htmlPage'>
+        {{ htmlPage }}
       </div>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 import ShadowBox from '../accountCenter/shadow_box'
 export default {
   name: 'extractMoney',
@@ -71,22 +78,151 @@ export default {
   data () {
       return {
           bigMoneyCard: false,
-          blankImg: './static/images/blankLogo/ABC.png',
+          blankImg: '',
           boxBoolean: false,
           dataChild: {
             title: '提示',
             containerBoolean: false
-          }
+          },
+          canUseMoney: '',
+          bankNum: '',
+          holiday: false,
+          tempBoolean: false,
+          cardLimit: 0,
+          moenyCash: '',
+          withdrawMessage1: '',
+          withdrawMessage2: '',
+          withdrawMessage3: '',
+          withdrawMessage: '实时到账',
+          errShow: false,
+          errMessage: '',
+          openAccountCard: '',
+          beginTime: '',
+          endTime: '',
+          htmlPage: ''
       }
   },
+  computed: {
+    ...mapState([
+      'token'
+    ])
+  },
+  mounted(){
+    this.getInfo()
+  },
   methods: {
+    ...mapActions([
+      'changeLoading'
+    ]),
     toggleTap() {
-      this.bigMoneyCard = !this.bigMoneyCard
-      this.boxBoolean = this.bigMoneyCard
+      console.log(this.commonJs.getTimeNow().hours)
+      // 判断是否正常工作时间
+      if(!this.holiday && this.commonJs.getTimeNow().hours >= this.beginTime && this.commonJs.getTimeNow().hours <= this.endTime){
+        this.bigMoneyCard = !this.bigMoneyCard
+        if(this.bigMoneyCard){
+          if(this.moenyCash < this.cardLimit){
+            this.withdrawMessage = this.withdrawMessage2
+          }else{
+            this.withdrawMessage = this.withdrawMessage3
+          }
+
+        }else{
+          // 小额
+          this.withdrawMessage = this.withdrawMessage1
+        }
+      }else{
+        this.tempBoolean = !this.tempBoolean
+        this.boxBoolean = this.tempBoolean
+      }
+      
     },
     shadowBoxData(val) {
       this.boxBoolean = val
     },
+    getInfo(){
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/withdrawCash/withdrawCash',
+        params: {
+          token: this.token,
+          userId: ''
+        }
+      }).then(data => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          const dataTemp = data.data.dataBody
+          this.blankImg = dataTemp.src
+          this.canUseMoney = dataTemp.userLimit 
+          this.bankNum = dataTemp.bankNo.substring(dataTemp.bankNo.length-4)
+          this.holiday = dataTemp.holiday
+          this.cardLimit = dataTemp.cardLimit
+          this.withdrawMessage1 = dataTemp.withdrawMessage1
+          this.withdrawMessage2 = dataTemp.withdrawMessage2
+          this.withdrawMessage3 = dataTemp.withdrawMessage3
+          this.beginTime = parseFloat(dataTemp.beginTime.replace('-', '.'))
+          this.endTime = parseFloat(dataTemp.endTime.replace('-', '.'))
+
+        }
+        this.$store.commit('changeLoading', false)
+      }).catch(err => {
+        console.log(err)
+        this.$store.commit('changeLoading', false)
+      })
+    },
+    goWithdraw() {
+      console.log(this.beginTime, this.endTime)
+      if(this.isTrueGoWithdraw()){
+        this.$store.commit('changeLoading', true)
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/fdep/user/withdraw',
+          params: {
+            token: this.token,
+            money: this.moenyCash,
+            routeCode: this.bigMoneyCard ? 2 : 1,
+            cardBankCnaps: this.bigMoneyCard ? this.openAccountCard : ''
+          }
+        }).then(data => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.htmlPage = data.data.dataBody.responseHtml
+            this.$nextTick(() => {
+              console.log(document.getElementById("frm1"), this.htmlPage)
+              document.getElementById("frm1").submit()
+            })
+          }
+
+          this.$store.commit('changeLoading', false)
+        }).catch(err => {
+          console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
+      }
+    },
+    isTrueGoWithdraw(){
+      if(this.moenyCash < 1){
+        this.errShow = true
+        this.errMessage = '提现金额大于等于1元'
+        return false
+      }else{
+        this.errShow = false
+      }
+      if(this.bigMoneyCard && !this.openAccountCard){
+        this.errShow = true
+        this.errMessage = '请输入开户行行号'
+        return false
+      }else{
+        this.errShow = false
+      }
+      if(this.moenyCash > this.canUseMoney){
+        this.errShow = true
+        this.errMessage = '提现金额需小于可提金额'
+        return false
+      }else{
+        this.errShow = false
+      }
+      return true
+    }
   }
 }
 </script>

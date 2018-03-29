@@ -21,6 +21,9 @@ const store = new Vuex.Store({
             mobile: '',
             password: '',
             captchamImg: ''
+        },
+        resetPassword: {
+            resetPWToken: ''
         }
     },
     mutations: {
@@ -37,6 +40,9 @@ const store = new Vuex.Store({
             state.registerUser.mobile = obj.mobile
             state.registerUser.password = obj.password
             state.registerUser.captchamImg = obj.captchamImg
+        },
+        changeResetPassword(state, obj){
+            state.resetPassword.resetPWToken = obj.resetPWToken || ''
         }
     },
     plugins: [vuexLocal.plugin]

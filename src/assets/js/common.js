@@ -2,7 +2,7 @@ export default {
     getCommonImgCode: function(vueObj){
         vueObj.$http({
             method: 'get',
-            url: vueObj.api + '/verifyCodeServlet', 
+            url: vueObj.api + '/verifyCodeServlet',
             withCredentials: true,
             responseType: 'arraybuffer',
             proxy: {
@@ -22,27 +22,27 @@ export default {
             vueObj.$store.commit('changeLoading', false)
         })
     },
-    isPoneAvailable: function (str) { 
-        // 手机号验证 
-        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;  
-        if (!myreg.test(str)) {  
-            return false;  
-        } else {  
-            return true;  
-        }  
+    isPoneAvailable: function (str) {
+        // 手机号验证
+        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!myreg.test(str)) {
+            return false;
+        } else {
+            return true;
+        }
     },
     checkIdNum: function(str) {
-        var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
-        if(!regIdNo.test(str)){ 
-            return false; 
+        var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if(!regIdNo.test(str)){
+            return false;
         }else{
             return true
         }
     },
     checkRealName: function(str){
-        var regName =/^[\u4e00-\u9fa5]{2,4}$/; 
-        if(!regName.test(str)){ 
-            return false; 
+        var regName =/^[\u4e00-\u9fa5]{2,4}$/;
+        if(!regName.test(str)){
+            return false;
         }else{
             return true
         }
@@ -50,7 +50,7 @@ export default {
     passwordCheck: function (str) {
         //6到16位数字与字母组合
         var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
-        
+
         if(!pwdReg.test(str)){
             return false
         }else{
@@ -68,7 +68,7 @@ export default {
             }else{
                 clearInterval(timer)
             }
-            
+
         }, obj.delay)
     },
     dealTelStr: function(str){
@@ -98,5 +98,16 @@ export default {
         return {
             hours: timeNow.getHours()
         }
+    },
+    //隐藏error
+    toggle(data,msg){
+      console.log(data.errShow);
+      data.errMessage=msg;
+      data.errShow=true;
+      clearTimeout(T);
+      var T=setTimeout(function(){
+        data.errShow=false;
+      },2000);
+
     }
 }

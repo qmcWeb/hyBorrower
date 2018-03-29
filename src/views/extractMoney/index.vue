@@ -51,12 +51,12 @@
         </div>
 
         <div class="read_info">
-          我已阅读并同意 <span>《钱满仓提现服务协议》</span>
+          我已阅读并同意 <a href="https://www.qianmancang.com/mobile/mobile-withdrawAgreement" style="color: #3836e9">《钱满仓提现服务协议》</a>
         </div>
 
-        <div class="extract_info">
+        <a class="extract_info" href="https://www.qianmancang.com/mobile/user/transfer-rules">
           提现说明
-        </div>
+        </a>
         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
@@ -134,7 +134,7 @@ export default {
         this.tempBoolean = !this.tempBoolean
         this.boxBoolean = this.tempBoolean
       }
-      
+
     },
     shadowBoxData(val) {
       this.boxBoolean = val
@@ -152,7 +152,7 @@ export default {
         if(data.data && data.data.code === '200'){
           const dataTemp = data.data.dataBody
           this.blankImg = dataTemp.src
-          this.canUseMoney = dataTemp.userLimit 
+          this.canUseMoney = dataTemp.userLimit
           this.bankNum = dataTemp.bankNo.substring(dataTemp.bankNo.length-4)
           this.holiday = dataTemp.holiday
           this.cardLimit = dataTemp.cardLimit

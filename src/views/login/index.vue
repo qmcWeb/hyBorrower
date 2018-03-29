@@ -23,9 +23,12 @@
         <div v-if="errShow" class="err_message">
           {{ errMessage }}
         </div>
-        <div class="footer" @click="$router.push('/login')">
+        <span class="footer">
+                 <a  href="https://www.qianmancang.com/mobile/weChat_agreement">
           《钱满仓网站服务协议》
-        </div>
+        </a>
+        </span>
+
       </div>
   </div>
 </template>
@@ -88,7 +91,7 @@ export default {
       }
     },
     loginMethod() {
-      
+
       if(this.activeBtn){
         this.$store.commit('changeLoading', true)
         this.$http({

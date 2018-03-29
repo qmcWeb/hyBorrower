@@ -117,14 +117,16 @@ export default {
           this.blankBoolean = dataTemp.isOpenJXAccount === 'true' ? true : false
           this.tradeBoolean = dataTemp.isPasswordSet === 'true' ? true : false
           this.repeamentBoolean = dataTemp.isRepayAuthSet === 'true' ? true : false
-          this.drawCash()
+          this.drawCash();
+          this.$store.commit('changeLoading', false)
+        }else{
+            this.setOut();
         }
-        this.$store.commit('changeLoading', false)
       }).catch(err => {
         console.log(err)
         this.$store.commit('changeLoading', false)
       })
-      
+
     },
     drawCashBtn() {
       if(this.activeBtn){
@@ -184,7 +186,7 @@ export default {
         }).then(data => {
           console.log(data)
           if(data.data && data.data.code === '200'){
-            this.htmlPage = data.data.dataBody.paymentAuth 
+            this.htmlPage = data.data.dataBody.paymentAuth
             this.$nextTick(() => {
               document.getElementById("frm1").submit()
             })

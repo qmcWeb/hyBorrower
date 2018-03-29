@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-loading='loading'>
+  <div id="app" v-loading.fullscreen='loading'>
     <!-- <div v-wechat-title='$route.meta.title'></div> -->
     <router-view />
   </div>
@@ -11,7 +11,7 @@ export default {
   name: 'App',
   data () {
     return {
-      
+
     }
   },
   computed: {
@@ -23,8 +23,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  #app
-    height: 100%;
-    width: 100%;
+
 </style>
 

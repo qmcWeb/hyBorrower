@@ -19,7 +19,7 @@
           <span>注册</span>
         </div>
         <div class="control">
-          注册借款账户代表您同意<span>《钱满仓网站服务协议》</span>
+          注册借款账户代表您同意<a href="https://www.qianmancang.com/mobile/weChat_agreement" style="color: #3d3bee">《钱满仓网站服务协议》</a>
         </div>
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
@@ -126,11 +126,11 @@ export default {
           this.errMessage = '输入有误'
           console.log(err)
         })
-        
+
       }
     },
     registerPort(){
-      
+
     },
     checkPassword() {
       this.checkPasswordBoolean = this.commonJs.passwordCheck(this.password)
@@ -147,7 +147,7 @@ export default {
       }
     },
     getImgCode(){
-      
+
       this.commonJs.getCommonImgCode(this)
     }
   },

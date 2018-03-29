@@ -10,7 +10,7 @@
         <div class="password login_input_box">
           <input maxlength="18" @keyup="checkPassword" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
         </div>
-        
+
 
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>立即开户</span>
@@ -73,7 +73,7 @@ export default {
       this.account = ''
     },
     loginMethod() {
-      
+
       if(this.activeBtn){
         this.$store.commit('changeLoading', true)
         this.$http({
@@ -93,24 +93,26 @@ export default {
               this.$store.commit('changeLoading', false)
               document.getElementById("frm1").submit()
             })
-           
+
           }else{
             this.errShow = true
-            this.errMessage = data.data.message
+            this.errMessage = data.data.message;
+            setTimeout(function(){
+              this.errShow=false
+            },2000)
             this.$store.commit('changeLoading', false)
           }
         }).catch(err => {
           console.log(err)
           this.$store.commit('changeLoading', false)
         })
-        
+
       }
     },
     checkPassword() {
       this.checkPasswordBoolean = this.commonJs.checkIdNum(this.password)
       if(!this.checkPasswordBoolean){
-        this.errShow = true
-        this.errMessage = '身份证号不正确'
+        this.commonJs.toggle(this,'身份证号不正确')
       }else{
         this.errShow = false
       }
@@ -124,8 +126,7 @@ export default {
       this.checkNameBoolean = this.commonJs.checkRealName(this.account)
       console.log(this.account)
       if(!this.checkNameBoolean){
-        this.errShow = true
-        this.errMessage = '真实姓名不正确'
+        this.commonJs.toggle(this,'真实姓名不正确')
       }else{
         this.errShow = false
       }

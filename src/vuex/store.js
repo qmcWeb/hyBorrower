@@ -16,7 +16,7 @@ const store = new Vuex.Store({
             userId: '',
             mobile: ''
         },
-        token: localStorage.getItem('token') || null,
+        token: null,
         registerUser: {
             mobile: '',
             password: '',
@@ -31,7 +31,6 @@ const store = new Vuex.Store({
             state.loading = value
         },
         changeUser(state, obj){
-            localStorage.setItem('token', obj ? (obj.token || null) : null)
             state.token = obj ? (obj.token || null) : null
             state.userObj.userId = obj ? (obj.userId || '') : ''
             state.userObj.mobile = obj ? (obj.mobile || '') : ''

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import blank from '../views/blank/index.vue'
 import Login from '../views/login/index.vue'
 import Register from '../views/register/register.vue'
 import InfoCheck from '../views/register/infoCheck.vue'
@@ -13,6 +14,14 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
+    {
+      path: '/',
+      name: 'blank',
+      component: blank,
+      meta: {
+        title: '汇银'
+      }
+    },
     {
       path: '/login',
       name: '登录',

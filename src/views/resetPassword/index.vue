@@ -25,7 +25,9 @@
           </div>
           <div class="check_input login_input_box">
             <input maxlength="4" @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
-            <span class="show_check_img"></span>
+            <span class="show_check_img" @click="getImgCode">
+              <img :src="imgCode" alt="">
+            </span>
           </div>
 
         </div>
@@ -61,11 +63,12 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'resetPassword',
   data () {
       return {
-          account: '13567567675',
+          account: '',
           checkNumCon: '',
           delete_active: true,
           errMessage: '手机号输入错误',
@@ -81,13 +84,23 @@ export default {
           secondPasswordBoolean: false,
           firstPassword: '',
           secondPassword: '',
+          imgCode: ''
       }
   },
   mounted(){
     this.accountRight()
-
+    this.getImgCode()
+  },
+  computed: {
+    ...mapState([
+      'resetPassword'
+    ])
   },
   methods: {
+    ...mapActions([
+      'changeLoading',
+      'changeResetPassword'
+    ]),
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
@@ -125,17 +138,101 @@ export default {
     },
     loginMethod() {
       if(this.showBoxNum === 1 && this.activeBtn === true){
-        this.showBoxNum++
-        var str = this.account.substring(3,7)
-        this.accountFilter = this.account.replace(str, '****')
-        this.activeBtn = false
+        this.firstLogin()
       }else if(this.activeBtn && this.showBoxNum === 2){
-        this.showBoxNum++
-        this.btnInfo = '重置密码'
-        this.activeBtn = false
+        this.secondLogin()
       } else if(this.activeBtn && this.showBoxNum === 3){
-        this.$router.push('/accountCenter')
+        this.thirdLogin()
       }
+    },
+    firstLogin(){
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWGCode',
+        params: {
+          imgCode: this.checkNumCon,
+          mobile: this.account
+        }
+      }).then((data) => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.showBoxNum++
+          var str = this.account.substring(3,7)
+          this.accountFilter = this.account.replace(str, '****')
+          this.activeBtn = false
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+        }
+        this.$store.commit('changeLoading', false)
+      }).catch(err => {
+        console.log(err)
+         this.$store.commit('changeLoading', false)
+      })
+    },
+    secondLogin(){
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWVCode',
+        params: {
+          mobile: this.account,
+          captchaMobile: this.checkInfoNum
+        }
+      }).then(data => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.showBoxNum++
+          this.btnInfo = '重置密码'
+          this.activeBtn = false
+          this.$store.commit('changeResetPassword', data.data.dataBody || {})
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+        }
+        this.$store.commit('changeLoading', false)
+      }).catch(err => {
+        console.log(err)
+         this.$store.commit('changeLoading', false)
+      })
+    },
+    thirdLogin() {
+      this.$store.commit('changeLoading', true)
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPW',
+        params: {
+          password: this.firstPassword,
+          rePassword: this.secondPassword,
+          resetPWToken: this.resetPassword.resetPWToken,
+          mobile: this.account
+        }
+      }).then(data => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.$router.push('/login')
+        }else{
+          this.errShow = true
+          this.errMessage = data.data.message
+          this.$store.commit('changeLoading', false)
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$store.commit('changeLoading', false)
+      })
+    },
+    getInfoCodeAgain() {
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/platform/resetPWGCode',
+        params: {
+          imgCode: this.checkNumCon,
+          mobile: this.account
+        }
+      }).then((data) => {
+        console.log(data)
+      })
     },
     getCountDown() {
       var that = this
@@ -154,6 +251,7 @@ export default {
     getAgainCount() {
       if(this.countNum === '重新获取'){
         this.getCountDown()
+        this.getInfoCodeAgain()
       }
     },
     checkInfoNumMethod() {
@@ -200,6 +298,9 @@ export default {
       }else{
         this.activeBtn = false
       }
+    },
+    getImgCode(){
+      this.commonJs.getCommonImgCode(this)
     }
   },
   watch: {

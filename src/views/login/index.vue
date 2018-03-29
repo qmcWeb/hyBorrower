@@ -96,7 +96,8 @@ export default {
           url: this.api + '/app/platform/loginLoaner',
           params: {
             loginName: this.account,
-            password: this.password
+            password: this.password,
+            source: 'huiyin'
           }
         }).then((data) => {
           console.log(data)

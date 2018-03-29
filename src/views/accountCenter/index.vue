@@ -116,7 +116,7 @@ export default {
           this.ableMoney = dataTemp.canUseBalance
           this.blankBoolean = dataTemp.isOpenJXAccount === 'true' ? true : false
           this.tradeBoolean = dataTemp.isPasswordSet === 'true' ? true : false
-          this.repeamentBoolean = dataTemp.isInvest === 'true' ? true : false
+          this.repeamentBoolean = dataTemp.isRepayAuthSet === 'true' ? true : false
           this.drawCash()
         }
         this.$store.commit('changeLoading', false)
@@ -175,7 +175,25 @@ export default {
     goSetPower(){
       // 设置还款授权
       if(!this.repeamentBoolean && this.tradeBoolean){
-
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/fdep/user/repayAuthPage',
+          params: {
+            token: this.token
+          }
+        }).then(data => {
+          console.log(data)
+          if(data.data && data.data.code === '200'){
+            this.htmlPage = data.data.dataBody.paymentAuth 
+            this.$nextTick(() => {
+              document.getElementById("frm1").submit()
+            })
+          }
+          this.$store.commit('changeLoading', false)
+        }).catch(err => {
+          console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
       }
     }
   },

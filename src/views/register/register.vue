@@ -148,27 +148,7 @@ export default {
     },
     getImgCode(){
       
-      this.$http({
-        method: 'get',
-        url: this.api + '/verifyCodeServlet', 
-        withCredentials: true,
-        responseType: 'arraybuffer',
-        proxy: {
-          host: 'http://218.247.190.158',
-          port: 17774
-        }
-      }).then(response => {
-        return 'data:image/png;base64,' + btoa(
-        new Uint8Array(response.data)
-            .reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
-      }).then((data) => {
-        console.log(data)
-        this.imgCode = data
-        this.$store.commit('changeLoading', false)
-      }).catch((response) => {
-        this.$store.commit('changeLoading', false)
-      })
+      this.commonJs.getCommonImgCode(this)
     }
   },
   watch: {

@@ -159,6 +159,7 @@ export default {
           this.withdrawMessage1 = dataTemp.withdrawMessage1
           this.withdrawMessage2 = dataTemp.withdrawMessage2
           this.withdrawMessage3 = dataTemp.withdrawMessage3
+          this.openAccountCard = dataTemp.payAllianceCode
           this.beginTime = parseFloat(dataTemp.beginTime.replace('-', '.'))
           this.endTime = parseFloat(dataTemp.endTime.replace('-', '.'))
 
@@ -185,11 +186,14 @@ export default {
         }).then(data => {
           console.log(data)
           if(data.data && data.data.code === '200'){
-            this.htmlPage = data.data.dataBody.responseHtml
+            this.htmlPage = data.data.dataBody.withdrawResponse
             this.$nextTick(() => {
               console.log(document.getElementById("frm1"), this.htmlPage)
               document.getElementById("frm1").submit()
             })
+          }else{
+            this.errShow = true
+            this.errMessage = data.data.message
           }
 
           this.$store.commit('changeLoading', false)

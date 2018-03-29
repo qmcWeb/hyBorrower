@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <script>
+        function _debounce(fn,wait){
+            var timer = null;
+            return function(){
+                clearTimeout(timer)
+                timer = setTimeout(()=>{
+                    fn()
+                },wait)
+            }
+        }
+
+function _log(){
+    console.log(1)
+}
+window.onmouseover = _debounce(_log,1000)
+        
+        </script>
+</body>
+</html>

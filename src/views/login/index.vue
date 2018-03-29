@@ -2,7 +2,7 @@
   <div id="login">
       <div class="main">
         <div class="account login_input_box">
-          <input @keyup='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)"  v-model="account"  class="login_input" type="number" placeholder="手机号／用户名">
+          <input oninput="if(value.length>11)value=value.slice(0,11)"  v-model="account"  class="login_input" type="number" placeholder="手机号／用户名">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
@@ -53,6 +53,11 @@ export default {
       'token'
     ])
   },
+  created() {
+    this.$watch('account', this.commonJs.debounce(() => {
+      this.accountRight()
+    }, 1000))
+  },
   mounted(){
     this.$store.commit('changeLoading', false)
   },
@@ -72,7 +77,12 @@ export default {
       this.delete_active = false
       this.account = ''
     },
+    test(){
+      console.log('222')
+    },
     accountRight() {
+      
+
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
       this.accountBoolean = this.commonJs.isPoneAvailable(this.account)
       if(this.checkNum && this.accountBoolean){

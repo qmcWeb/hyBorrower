@@ -109,5 +109,17 @@ export default {
         data.errShow=false;
       },2000);
 
+    },
+    debounce(func, delay) {
+        let timer
+        return function (...args) {
+            if (timer) {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+                console.log(this)
+                func.apply(this, args)
+            }, delay)
+        }
     }
 }

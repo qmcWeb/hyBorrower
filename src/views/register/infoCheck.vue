@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="check_input login_input_box">
-          <input maxlength="6" @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="短信验证码">
+          <input maxlength="6" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="短信验证码">
           <span @click="getAgainCount" class="show_check_num">{{ countNum }}</span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
@@ -43,6 +43,11 @@ export default {
     ...mapState([
       'registerUser'
     ])
+  },
+  created() {
+    this.$watch('checkNumCon', this.commonJs.debounce(() => {
+      this.checkNumMethod()
+    }))
   },
   mounted(){
     this.getCountDown()

@@ -5,10 +5,10 @@
           为了您的资金安全，请务必输入您本人的身份证号和银行卡号码。
         </div>
         <div class="account login_input_box">
-          <input v-model="account" class="login_input" type="text" placeholder="请输入真是姓名">
+          <input v-model="account" @focus="errShow=false" class="login_input" type="text" placeholder="请输入真是姓名">
         </div>
         <div class="password login_input_box">
-          <input maxlength="18" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
+          <input maxlength="18" @focus="errShow=false" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">
         </div>
 
 
@@ -16,7 +16,7 @@
           <span>立即开户</span>
         </div>
         <div class="control">
-          注册账户代表您同意<span>《江西银行资金帐户服务第三方协议》</span>
+          注册账户代表您同意<a href="https://www.qianmancang.com/mobile/weChat_twoagreement" style="color: #1F1F00">《江西银行资金帐户服务第三方协议》</a>
         </div>
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
@@ -61,12 +61,21 @@ export default {
     ])
   },
   created() {
-    this.$watch('account', this.commonJs.debounce(() => {
-      this.checkName()
-    }))
-    this.$watch('password', this.commonJs.debounce(() => {
-      this.checkPassword()
-    }))
+    //监测每个输入框是否有值，点亮提交btn
+    let _this=this;
+    this.$watch(function () {
+        return [_this.account,_this.password]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
   },
   mounted(){
     this.$store.commit('changeLoading', false)

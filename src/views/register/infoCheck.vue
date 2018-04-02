@@ -10,17 +10,17 @@
           </div>
         </div>
         <div class="check_input login_input_box">
-          <input maxlength="6" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="短信验证码">
+          <input maxlength="6" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="短信验证码" @focus="errShow=false">
           <span @click="getAgainCount" class="show_check_num">{{ countNum }}</span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>完成</span>
         </div>
-        
+
         <div v-show="errShow" class="err_message">
           {{ errMessage }}
         </div>
-        
+
       </div>
   </div>
 </template>
@@ -45,9 +45,21 @@ export default {
     ])
   },
   created() {
-    this.$watch('checkNumCon', this.commonJs.debounce(() => {
-      this.checkNumMethod()
-    }))
+    //监测每个输入框是否有值，点亮提交btn
+    let _this=this;
+    this.$watch(function () {
+        return [_this.checkNumCon]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
   },
   mounted(){
     this.getCountDown()
@@ -100,7 +112,7 @@ export default {
           console.log(err)
           this.$store.commit('changeLoading', false)
         })
-        
+
       }
     },
     getCountDown() {
@@ -135,7 +147,7 @@ export default {
         withCredentials: true
       }).then((data) => {
         console.log(data)
-        
+
       })
     },
     getInfo() {
@@ -143,7 +155,7 @@ export default {
       this.telphoneNum = this.$route.query.telNum.replace(str, '****')
       this.$store.commit('changeLoading', false)
     }
-    
+
   }
 }
 </script>

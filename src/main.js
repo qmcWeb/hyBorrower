@@ -18,7 +18,7 @@ Vue.config.productionTip = false
 Vue.use(VueWechatTitle)
 Vue.use(ElementUI)
 Vue.prototype.commonJs = commonJs
-Axios.defaults.withCredentials = true 
+Axios.defaults.withCredentials = true
 Vue.prototype.$http = Axios
 // 判断是开发环境还是生产环境,开发环境请求接口代理
 Vue.prototype.api = process.env.NODE_ENV === 'development' ? '/dev' : ''

@@ -2,15 +2,15 @@
   <div id="register">
       <div class="main">
         <div class="account login_input_box">
-          <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+          <input  v-model="account" class="login_input" type="tel" maxlength="11" placeholder="手机号／用户名" @focus="errShow=false">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
-          <input ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
+          <input ref="password" :value="password" @focus="errShow=false" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
           <span class="show_password" @click="showPassword"></span>
         </div>
         <div class="check_input login_input_box">
-          <input ref="check_input"  v-model="checkNumCon" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">
+          <input ref="check_input"  v-model="checkNumCon" @focus="errShow=false" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">
           <span class="show_check_img" @click="getImgCode">
             <img :src="imgCode" alt="">
           </span>
@@ -55,21 +55,30 @@ export default {
     this.getImgCode()
   },
   created() {
-    this.$watch('account', this.commonJs.debounce(() => {
-      this.accountRight()
-    }))
-    this.$watch('password', this.commonJs.debounce(() => {
-      this.checkPassword()
-    }))
-    this.$watch('checkNumCon', this.commonJs.debounce(() => {
-      this.checkNumMethod()
-    }))
+    //监测每个输入框是否有值，点亮提交btn
+    let _this=this;
+    this.$watch(function () {
+        return [_this.account,_this.password,_this.checkNumCon]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
   },
   methods: {
     ...mapActions([
       'changeLoading',
       'changeRegisterUser'
     ]),
+    clearTip(){
+      this.errShow = false
+    },
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'

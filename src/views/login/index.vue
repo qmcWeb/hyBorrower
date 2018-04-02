@@ -6,7 +6,7 @@
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
-          <input @keyup="checkNumMethod" ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码">
+          <input ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码">
           <span class="show_password" @click="showPassword"></span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
@@ -56,7 +56,10 @@ export default {
   created() {
     this.$watch('account', this.commonJs.debounce(() => {
       this.accountRight()
-    }, 1000))
+    }))
+    this.$watch('password', this.commonJs.debounce(() => {
+      this.checkNumMethod()
+    }))
   },
   mounted(){
     this.$store.commit('changeLoading', false)

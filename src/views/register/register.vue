@@ -2,15 +2,15 @@
   <div id="register">
       <div class="main">
         <div class="account login_input_box">
-          <input @keyup='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+          <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
-          <input @keyup="checkPassword" ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
+          <input ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
           <span class="show_password" @click="showPassword"></span>
         </div>
         <div class="check_input login_input_box">
-          <input @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">
+          <input ref="check_input"  v-model="checkNumCon" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">
           <span class="show_check_img" @click="getImgCode">
             <img :src="imgCode" alt="">
           </span>
@@ -53,6 +53,17 @@ export default {
   },
   mounted(){
     this.getImgCode()
+  },
+  created() {
+    this.$watch('account', this.commonJs.debounce(() => {
+      this.accountRight()
+    }))
+    this.$watch('password', this.commonJs.debounce(() => {
+      this.checkPassword()
+    }))
+    this.$watch('checkNumCon', this.commonJs.debounce(() => {
+      this.checkNumMethod()
+    }))
   },
   methods: {
     ...mapActions([

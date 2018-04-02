@@ -119,7 +119,7 @@ export default {
             timer = setTimeout(() => {
                 console.log(this)
                 func.apply(this, args)
-            }, delay)
+            }, delay || 1000)
         }
     }
 }

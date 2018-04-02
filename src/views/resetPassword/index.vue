@@ -20,11 +20,11 @@
         </div>
         <div v-if="showBoxNum === 1" class="first common">
           <div class="account login_input_box">
-            <input v-on:blur='accountRight()' oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+            <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
             <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
           </div>
           <div class="check_input login_input_box">
-            <input maxlength="4" @keyup="checkNumMethod" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
+            <input maxlength="4" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
             <span class="show_check_img" @click="getImgCode">
               <img :src="imgCode" alt="">
             </span>
@@ -35,7 +35,7 @@
         <div v-if="showBoxNum === 2" class="second common">
           <div class="text_info">短信验证码已发送到{{ accountFilter }}</div>
           <div class="check_info_num login_input_box">
-            <input maxlength="6" @keyup="checkInfoNumMethod"   v-model="checkInfoNum" class="login_input" type="text" placeholder="短信验证码">
+            <input maxlength="6"  v-model="checkInfoNum" class="login_input" type="text" placeholder="短信验证码">
             <span @click="getAgainCount" class="show_check_num">{{ countNum }}</span>
           </div>
 
@@ -43,10 +43,10 @@
 
         <div v-if="showBoxNum === 3" class="third common">
           <div class="first_password login_input_box">
-            <input maxlength="16" @keyup="firstPasswordMethod"   v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
+            <input maxlength="16" v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
           </div>
           <div class="second_password login_input_box">
-            <input maxlength="16" @keyup="secondPasswordMethod"   v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">
+            <input maxlength="16" v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">
           </div>
 
         </div>
@@ -95,6 +95,23 @@ export default {
     ...mapState([
       'resetPassword'
     ])
+  },
+  created() {
+    this.$watch('account', this.commonJs.debounce(() => {
+      this.accountRight()
+    }))
+    this.$watch('checkNumCon', this.commonJs.debounce(() => {
+      this.checkNumMethod()
+    }))
+    this.$watch('checkInfoNum', this.commonJs.debounce(() => {
+      this.checkInfoNumMethod()
+    }))
+    this.$watch('firstPassword', this.commonJs.debounce(() => {
+      this.firstPasswordMethod()
+    }))
+    this.$watch('secondPassword', this.commonJs.debounce(() => {
+      this.secondPasswordMethod()
+    }))
   },
   methods: {
     ...mapActions([

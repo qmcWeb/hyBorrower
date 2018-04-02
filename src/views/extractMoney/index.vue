@@ -16,7 +16,7 @@
           <div class="top">可提金额: {{ canUseMoney }}元</div>
           <div class="bottom">
             <span>￥</span>
-            <input type="number" v-model="moenyCash" placeholder="请输入金额">
+            <input type="number" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
           </div>
         </div>
 

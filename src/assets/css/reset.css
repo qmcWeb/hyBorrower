@@ -41,7 +41,7 @@
   src:url('../fonts/numberFont.ttf')
 }
 input{
-  font-family: numberFont;  line-height: 1;
+  line-height: 1;
 }
 .numBerFont{
   font-family: numberFont;

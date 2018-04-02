@@ -11,7 +11,7 @@
           <div class="money_info">
             <div class="img"></div>
             <div class="text">可用余额</div>
-            <div class="money"><span>￥</span>{{ ableMoney }}</div>
+            <div class="money numBerFont"><span>￥</span>{{ ableMoney }}</div>
           </div>
         </div>
 

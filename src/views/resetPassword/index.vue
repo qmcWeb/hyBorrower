@@ -20,11 +20,11 @@
         </div>
         <div v-if="showBoxNum === 1" class="first common">
           <div class="account login_input_box">
-            <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input" type="number" placeholder="手机号／用户名">
+            <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input"  @focus="errShow=false" type="number" placeholder="手机号／用户名">
             <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
           </div>
           <div class="check_input login_input_box">
-            <input maxlength="4" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
+            <input maxlength="4" @focus="errShow=false" ref="check_input"  v-model="checkNumCon" class="login_input" type="text" placeholder="输入图形验证码">
             <span class="show_check_img" @click="getImgCode">
               <img :src="imgCode" alt="">
             </span>
@@ -35,7 +35,7 @@
         <div v-if="showBoxNum === 2" class="second common">
           <div class="text_info">短信验证码已发送到{{ accountFilter }}</div>
           <div class="check_info_num login_input_box">
-            <input maxlength="6"  v-model="checkInfoNum" class="login_input" type="text" placeholder="短信验证码">
+            <input maxlength="6" @focus="errShow=false" v-model="checkInfoNum" class="login_input" type="text" placeholder="短信验证码">
             <span @click="getAgainCount" class="show_check_num">{{ countNum }}</span>
           </div>
 
@@ -43,10 +43,10 @@
 
         <div v-if="showBoxNum === 3" class="third common">
           <div class="first_password login_input_box">
-            <input maxlength="16" v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
+            <input maxlength="16" @focus="errShow=false" v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
           </div>
           <div class="second_password login_input_box">
-            <input maxlength="16" v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">
+            <input maxlength="16" @focus="errShow=false" v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">
           </div>
 
         </div>
@@ -88,7 +88,7 @@ export default {
       }
   },
   mounted(){
-    this.accountRight()
+    //this.accountRight()
     this.getImgCode()
   },
   computed: {
@@ -97,21 +97,66 @@ export default {
     ])
   },
   created() {
-    this.$watch('account', this.commonJs.debounce(() => {
-      this.accountRight()
-    }))
-    this.$watch('checkNumCon', this.commonJs.debounce(() => {
-      this.checkNumMethod()
-    }))
-    this.$watch('checkInfoNum', this.commonJs.debounce(() => {
-      this.checkInfoNumMethod()
-    }))
-    this.$watch('firstPassword', this.commonJs.debounce(() => {
-      this.firstPasswordMethod()
-    }))
-    this.$watch('secondPassword', this.commonJs.debounce(() => {
-      this.secondPasswordMethod()
-    }))
+    //监测每个输入框是否有值，点亮提交btn
+    //前两个
+    let _this=this;
+    this.$watch(function () {
+        return [_this.account,_this.checkNumCon]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
+    //中间的
+    this.$watch(function () {
+        return [_this.checkInfoNum]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
+    //后面的
+    this.$watch(function () {
+        return [_this.firstPassword,_this.secondPassword]
+      }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
+
+//    this.$watch('account', this.commonJs.debounce(() => {
+//      this.accountRight()
+//    }))
+//    this.$watch('checkNumCon', this.commonJs.debounce(() => {
+//      this.checkNumMethod()
+//    }))
+//    this.$watch('checkInfoNum', this.commonJs.debounce(() => {
+//      this.checkInfoNumMethod()
+//    }))
+//    this.$watch('firstPassword', this.commonJs.debounce(() => {
+//      this.firstPasswordMethod()
+//    }))
+//    this.$watch('secondPassword', this.commonJs.debounce(() => {
+//      this.secondPasswordMethod()
+//    }))
   },
   methods: {
     ...mapActions([
@@ -172,6 +217,7 @@ export default {
           mobile: this.account
         }
       }).then((data) => {
+        this.activeBtn=false;
         console.log(data)
         if(data.data && data.data.code === '200'){
           this.showBoxNum++
@@ -198,7 +244,7 @@ export default {
           captchaMobile: this.checkInfoNum
         }
       }).then(data => {
-        console.log(data)
+        this.activeBtn=false;
         if(data.data && data.data.code === '200'){
           this.showBoxNum++
           this.btnInfo = '重置密码'
@@ -226,7 +272,6 @@ export default {
           mobile: this.account
         }
       }).then(data => {
-        console.log(data)
         if(data.data && data.data.code === '200'){
           this.$router.push('/login')
         }else{

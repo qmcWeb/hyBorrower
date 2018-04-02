@@ -117,9 +117,8 @@ export default {
                 clearTimeout(timer)
             }
             timer = setTimeout(() => {
-                console.log(this)
                 func.apply(this, args)
-            }, delay || 1000)
+            }, delay || 300)
         }
     }
 }

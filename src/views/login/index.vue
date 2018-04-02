@@ -2,11 +2,11 @@
   <div id="login">
       <div class="main">
         <div class="account login_input_box">
-          <input   v-model="account"  class="login_input" type="number" placeholder="手机号／用户名" maxlength="11">
+          <input   v-model="account"  class="login_input" type="tel" placeholder="手机号／用户名" maxlength="11"  @focus="clearTip">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
-          <input ref="password" :value="password" v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码">
+          <input ref="password" :value="password"  v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码" @focus="clearTip">
           <span class="show_password" @click="showPassword"></span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
@@ -54,12 +54,21 @@ export default {
     ])
   },
   created() {
-    this.$watch('account', this.commonJs.debounce(() => {
-      this.accountRight()
-    }))
-    this.$watch('password', this.commonJs.debounce(() => {
-      this.checkNumMethod()
-    }))
+    //监测每个输入框是否有值，点亮提交btn
+    let _this=this;
+    this.$watch(function () {
+      return [_this.account,_this.password]
+    }, this.commonJs.debounce((newVal, oldVal) => {
+        let newArr=newVal;
+        for(let i=0;i<newArr.length;i++){
+          if(!newArr[i]){
+            _this.activeBtn=false;
+            return
+          }
+        }
+        _this.activeBtn=true;
+      })
+    )
   },
   mounted(){
     this.$store.commit('changeLoading', false)
@@ -69,6 +78,9 @@ export default {
       'changeLoading',
       'changeUser'
     ]),
+    clearTip(){
+      this.errShow = false
+    },
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
@@ -84,8 +96,7 @@ export default {
       console.log('222')
     },
     accountRight() {
-
-
+      this.errMessage='手机号码错误';
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
       this.accountBoolean = this.commonJs.isPoneAvailable(this.account)
       if(this.checkNum && this.accountBoolean){
@@ -95,8 +106,9 @@ export default {
       }
     },
     checkNumMethod() {
+      this.errShow = !this.commonJs.passwordCheck(this.password);
+      this.errMessage='密码格式错误';
       this.checkNum = this.commonJs.passwordCheck(this.password)
-
       if(this.checkNum && this.accountBoolean){
         this.activeBtn = true
       }else{
@@ -137,13 +149,11 @@ export default {
       handler: function(val, olderVal) {
         // 不要使用箭头函数
         if(val){
-            console.log(2222)
           this.delete_active = true
         }else{
           this.delete_active = false
           console.log(this.delete_active)
         }
-
       },
       deep: true
     }

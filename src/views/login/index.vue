@@ -2,7 +2,7 @@
   <div id="login">
       <div class="main">
         <div class="account login_input_box">
-          <input oninput="if(value.length>11)value=value.slice(0,11)"  v-model="account"  class="login_input" type="number" placeholder="手机号／用户名">
+          <input   v-model="account"  class="login_input" type="number" placeholder="手机号／用户名" maxlength="11">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
@@ -40,7 +40,7 @@ export default {
       return {
           account: '',
           password: '',
-          delete_active: true,
+          delete_active: false,
           passwordType: 'password',
           errMessage: '手机号输入错误',
           errShow: false,
@@ -81,7 +81,7 @@ export default {
       console.log('222')
     },
     accountRight() {
-      
+
 
       this.errShow = !this.commonJs.isPoneAvailable(this.account)
       this.accountBoolean = this.commonJs.isPoneAvailable(this.account)
@@ -134,8 +134,8 @@ export default {
       handler: function(val, olderVal) {
         // 不要使用箭头函数
         if(val){
+            console.log(2222)
           this.delete_active = true
-
         }else{
           this.delete_active = false
           console.log(this.delete_active)

@@ -35,7 +35,17 @@
    overflow-x: hidden;
    background-color: #f8f8f8;
  }
-
+@font-face {
+  /* font-properties */
+  font-family: numberFont;
+  src:url('../fonts/numberFont.ttf')
+}
+input{
+  font-family: numberFont;  line-height: 1;
+}
+.numBerFont{
+  font-family: numberFont;
+}
  blockquote, q {
      quotes: none;
  }

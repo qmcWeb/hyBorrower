@@ -40,7 +40,7 @@ export default {
           account: '',
           password: '',
           checkNumCon: '',
-          delete_active: true,
+          delete_active: false,
           passwordType: 'password',
           errMessage: '手机号输入错误',
           errShow: false,

@@ -16,7 +16,7 @@
           <div class="top">可提金额: {{ canUseMoney }}元</div>
           <div class="bottom">
             <span>￥</span>
-            <input type="number" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
+            <input type="number" @focus="errShow = false" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
           </div>
         </div>
 
@@ -32,7 +32,7 @@
 
         <div v-if="bigMoneyCard" class="big_money_card">
           <span class="left">开户行行号</span>
-          <input type="text" v-model="openAccountCard" placeholder="联系银行获取联行号并输入">
+          <input type="text" @focus="errShow = false" v-model="openAccountCard" placeholder="联系银行获取联行号并输入">
         </div>
 
         <div class="extract_money_info">
@@ -82,7 +82,9 @@ export default {
           boxBoolean: false,
           dataChild: {
             title: '提示',
-            containerBoolean: false
+            containerBoolean: false,
+            beginTime: '',
+            endTime: ''
           },
           canUseMoney: '',
           bankNum: '',
@@ -115,9 +117,9 @@ export default {
       'changeLoading'
     ]),
     toggleTap() {
-      console.log(this.commonJs.getTimeNow().hours)
+      console.log(this.commonJs.getTimeNow().hours,this.commonJs.getTimeNow().hourMinute,this.beginTime)
       // 判断是否正常工作时间
-      if(!this.holiday && this.commonJs.getTimeNow().hours >= this.beginTime && this.commonJs.getTimeNow().hours <= this.endTime){
+      if(!this.holiday && this.commonJs.getTimeNow().hourMinute >= this.beginTime && this.commonJs.getTimeNow().hourMinute <= this.endTime){
         this.bigMoneyCard = !this.bigMoneyCard
         if(this.bigMoneyCard){
           if(this.moenyCash < this.cardLimit){
@@ -161,7 +163,9 @@ export default {
           this.withdrawMessage3 = dataTemp.withdrawMessage3
           this.openAccountCard = dataTemp.payAllianceCode
           this.beginTime = parseFloat(dataTemp.beginTime.replace('-', '.'))
+          this.dataChild.beginTime = dataTemp.beginTime
           this.endTime = parseFloat(dataTemp.endTime.replace('-', '.'))
+          this.dataChild.endTime = dataTemp.endTime
 
         }
         this.$store.commit('changeLoading', false)

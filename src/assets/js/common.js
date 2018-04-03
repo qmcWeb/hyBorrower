@@ -96,7 +96,9 @@ export default {
     getTimeNow: function() {
         const timeNow = new Date()
         return {
-            hours: timeNow.getHours()
+            hours: timeNow.getHours(),
+            minutes: timeNow.getMinutes(),
+            hourMinute: parseFloat(timeNow.getHours() + '.' + timeNow.getMinutes())
         }
     },
     //隐藏error

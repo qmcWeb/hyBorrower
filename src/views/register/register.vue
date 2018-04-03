@@ -2,7 +2,7 @@
   <div id="register">
       <div class="main">
         <div class="account login_input_box">
-          <input  v-model="account" class="login_input" type="tel" maxlength="11" placeholder="手机号／用户名" @focus="errShow=false">
+          <input @blur="delete_active=false"  v-model="account" class="login_input" type="tel" maxlength="11" placeholder="手机号／用户名" @focus="errShow=false">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">

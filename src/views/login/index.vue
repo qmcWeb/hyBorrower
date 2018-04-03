@@ -2,12 +2,14 @@
   <div id="login">
       <div class="main">
         <div class="account login_input_box">
-          <input   v-model="account"  class="login_input" type="tel" placeholder="手机号／用户名" maxlength="11"  @focus="clearTip">
+          <input @blur="delete_active=false"  v-model="account"  class="login_input" type="tel" placeholder="手机号／用户名" maxlength="11"  @focus="clearTip">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
           <input ref="password" :value="password"  v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码" @focus="clearTip">
-          <span class="show_password" @click="showPassword"></span>
+          <span class="show_password" @click="showPassword">
+            <img :src="imgSrc" alt="">
+          </span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>同意协议并登录</span>
@@ -45,7 +47,8 @@ export default {
           errMessage: '手机号输入错误',
           errShow: false,
           checkNum: false,
-          activeBtn: false
+          activeBtn: false,
+          imgSrc: '../../../static/images/login/show_password.png'
       }
   },
   computed: {
@@ -84,8 +87,10 @@ export default {
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
+        this.imgSrc = '../../../static/images/login/hide_password.png'
       }else{
         this.passwordType = 'password'
+        this.imgSrc = '../../../static/images/login/show_password.png'
       }
     },
     hideDelete() {

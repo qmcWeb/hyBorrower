@@ -3,7 +3,7 @@
       <div class="main">
         <div class="top_box">
           <div class="info">
-            <div class="left">{{ commonJs.dealTelStr(userName) }}</div>
+            <div class="left">{{ realUserName ? realUserName : commonJs.dealTelStr(userName) }}</div>
             <div class="right" >
               <span @click="setOut">退出登录</span>
             </div>
@@ -28,6 +28,16 @@
                 <span v-if="blankBoolean" class="control_text">已开通</span>
                 <span v-else class="control_btn" @click="goOpenAccount">去开通</span>
               </div>
+            </div>
+            <div class="user_blank_info" v-show="blankBoolean"> 
+              <div class="user_cun_account">
+                <span>存管账户 :</span>
+                <span> {{ accountCard }}</span>
+              </div>
+              <div class="user_blank_id">
+                <span>银行卡号 :</span>
+                <span> 尾号{{ blankCard }}</span>
+              </div>  
             </div>
             <div class="trade_password user_li">
               <div class="text">交易密码</div>
@@ -69,6 +79,7 @@ export default {
   data () {
       return {
           userName: '',
+          realUserName: '',
           activeBtn: false,
           ableMoney: '0.0',
           blankBoolean: false,
@@ -79,7 +90,10 @@ export default {
             title: '开户及授权说明',
             containerBoolean: true
           },
-          htmlPage: ''
+          htmlPage: '',
+          prefInfoBoolean: false,
+          accountCard: '',
+          blankCard: ''
       }
   },
   computed: {
@@ -88,7 +102,35 @@ export default {
     ])
   },
   created(){
-    this.getInfo()
+    const promise = new Promise((resolve, reject) => {
+      this.$http({
+        method: 'post',
+        url: this.api + '/app/user/getUserAccountInfo',
+        params: {
+          token: this.token
+        }
+      }).then((data) => {
+        console.log(data)
+        if(data.data && data.data.code === '200'){
+          this.prefInfoBoolean = true
+          this.realUserName = data.data.dataBody.name
+          this.accountCard = data.data.dataBody.accountId
+          this.blankCard = data.data.dataBody.bankCard
+          resolve()
+        }else{
+          resolve()
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$store.commit('changeLoading', false)
+      })
+      
+    })
+    promise.then(() => {
+      this.getInfo()
+    })
+    
+    
   },
   methods: {
     ...mapActions([
@@ -101,6 +143,7 @@ export default {
       }
     },
     getInfo() {
+      console.log(this.prefInfoBoolean)
       this.$http({
         method: 'post',
         url: this.api + '/app/user/userCenterInfo',
@@ -114,7 +157,7 @@ export default {
           const dataTemp = data.data.dataBody
           this.userName = dataTemp.mobile
           this.ableMoney = dataTemp.canUseBalance
-          this.blankBoolean = dataTemp.isOpenJXAccount === 'true' ? true : false
+          this.blankBoolean = this.prefInfoBoolean ? true : false
           this.tradeBoolean = dataTemp.isPasswordSet === 'true' ? true : false
           this.repeamentBoolean = dataTemp.isRepayAuthSet === 'true' ? true : false
           this.drawCash();

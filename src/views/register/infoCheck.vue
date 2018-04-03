@@ -36,13 +36,15 @@ export default {
           errShow: false,
           checkNum: false,
           activeBtn: false,
-          countNum: '60s'
+          countNum: '60s',
+          isCountDao: true,
       }
   },
   computed: {
     ...mapState([
       'registerUser'
     ])
+    
   },
   created() {
     //监测每个输入框是否有值，点亮提交btn
@@ -60,10 +62,28 @@ export default {
         _this.activeBtn=true;
       })
     )
+    
   },
   mounted(){
-    this.getCountDown()
-    this.getInfo()
+    setTimeout(() => {
+      if(this.isCountDao){
+        this.getCountDown()
+      }
+      this.getInfo()
+    },200)
+    
+  },
+   beforeRouteEnter (to, from, next) {
+    
+    next(vm => {
+      if(from.path === '/register'){
+        vm.isCountDao = true
+        vm.countNum = '60s'
+      }else{
+        vm.isCountDao = false
+        vm.countNum = '重新获取'
+      }
+    })
   },
   methods: {
     ...mapActions([
@@ -146,6 +166,11 @@ export default {
         withCredentials: true
       }).then((data) => {
         console.log(data)
+        if(data.data && data.data.code === '200'){
+
+        }else{
+          this.commonJs.toggle(this,data.data.message)
+        }
 
       })
     },

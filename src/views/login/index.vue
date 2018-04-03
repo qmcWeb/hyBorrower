@@ -7,8 +7,8 @@
         </div>
         <div class="password login_input_box">
           <input ref="password" :value="password"  v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码" @focus="clearTip">
-          <span class="show_password" @click="showPassword">
-            <img :src="imgSrc" alt="">
+          <span :class="{show_password: true, hide_password: passwordType === 'text'}" @click="showPassword">
+            
           </span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
@@ -48,7 +48,6 @@ export default {
           errShow: false,
           checkNum: false,
           activeBtn: false,
-          imgSrc: '../../../static/images/login/show_password.png'
       }
   },
   computed: {
@@ -87,10 +86,8 @@ export default {
     showPassword() {
       if(this.passwordType === 'password'){
         this.passwordType = 'text'
-        this.imgSrc = '../../../static/images/login/hide_password.png'
       }else{
         this.passwordType = 'password'
-        this.imgSrc = '../../../static/images/login/show_password.png'
       }
     },
     hideDelete() {

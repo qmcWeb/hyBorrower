@@ -7,7 +7,7 @@
         </div>
         <div class="password login_input_box">
           <input ref="password" :value="password" @focus="errShow=false" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
-          <span class="show_password" @click="showPassword"></span>
+          <span :class="{show_password: true, hide_password: passwordType === 'text'}" @click="showPassword"></span>
         </div>
         <div class="check_input login_input_box">
           <input ref="check_input"  v-model="checkNumCon" @focus="errShow=false" class="login_input" type="text" maxlength="4" placeholder="输入图形验证码">

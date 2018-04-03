@@ -54,7 +54,7 @@
           我已阅读并同意 <a href="https://www.qianmancang.com/mobile/mobile-withdrawAgreement" style="color: #3836e9">《钱满仓提现服务协议》</a>
         </div>
 
-        <a class="extract_info" href="https://www.qianmancang.com/mobile/user/transfer-rules">
+        <a class="extract_info" href="javascript: void(0);" @click="$router.push('/extractServerTip')">
           提现说明
         </a>
         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>

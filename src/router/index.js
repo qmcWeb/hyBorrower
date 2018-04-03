@@ -8,6 +8,8 @@ import OpenAccount from '../views/register/openAccount.vue'
 import ResetPassword from '../views/resetPassword/index.vue'
 import ExtractMoney from '../views/extractMoney/index.vue'
 import AccountCenter from '../views/accountCenter/index.vue'
+import ServerAgreement from '../components/commonTcp/serverAgreement.vue'
+import ExtractServerTip from '../components/commonTcp/extractServerTip.vue'
 import store from '../vuex/store'
 
 Vue.use(Router)
@@ -77,13 +79,34 @@ const router = new Router({
       meta: {
         title: '我的账户'
       }
-    }
+    },
+    {
+      path: '/serverAgreement',
+      name: '钱满仓服务协议',
+      component: ServerAgreement,
+      meta: {
+        title: '钱满仓服务协议',
+        noLoading: true
+      }
+    },
+    {
+      path: '/extractServerTip',
+      name: '提现说明',
+      component: ExtractServerTip,
+      meta: {
+        title: '提现说明',
+        noLoading: true
+      }
+    },
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to)
+  if(!to.meta.noLoading){
+    store.commit('changeLoading', true)
+  }
   window.document.title = to.meta.title;
-  store.commit('changeLoading', true)
   next()
 })
 // router.afterEach((to, from, next) => {

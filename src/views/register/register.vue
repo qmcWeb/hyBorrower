@@ -136,8 +136,7 @@ export default {
           if(data.data && data.data.code === '200'){
             this.$router.push({path: '/infoCheck', query: {telNum: this.account}})
           }else{
-            this.errShow = true
-            this.errMessage = data.data.message
+            this.commonJs.toggle(this,data.data.message)
             this.$store.commit('changeLoading', false)
           }
         }).catch((err) => {

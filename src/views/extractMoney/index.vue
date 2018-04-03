@@ -192,8 +192,7 @@ export default {
               document.getElementById("frm1").submit()
             })
           }else{
-            this.errShow = true
-            this.errMessage = data.data.message
+            this.commonJs.toggle(this,data.data.message)
           }
 
           this.$store.commit('changeLoading', false)

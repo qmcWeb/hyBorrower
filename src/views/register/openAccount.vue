@@ -112,11 +112,7 @@ export default {
             })
 
           }else{
-            this.errShow = true
-            this.errMessage = data.data.message;
-            setTimeout(function(){
-              this.errShow=false
-            },2000)
+            this.commonJs.toggle(this,data.data.message)
             this.$store.commit('changeLoading', false)
           }
         }).catch(err => {

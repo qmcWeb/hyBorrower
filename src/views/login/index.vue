@@ -133,8 +133,7 @@ export default {
             this.$store.commit('changeUser', data.data.dataBody)
             this.$router.push('/accountCenter')
           }else{
-            this.errShow = true
-            this.errMessage = data.data.message
+            this.commonJs.toggle(this,data.data.message)
             this.$store.commit('changeLoading', false)
           }
         }).catch((err) => {

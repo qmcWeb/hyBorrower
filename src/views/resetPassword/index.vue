@@ -70,7 +70,7 @@ export default {
       return {
           account: '',
           checkNumCon: '',
-          delete_active: true,
+          delete_active: false,
           errMessage: '手机号输入错误',
           errShow: false,
           checkNum: false,
@@ -225,8 +225,8 @@ export default {
           this.accountFilter = this.account.replace(str, '****')
           this.activeBtn = false
         }else{
-          this.errShow = true
-          this.errMessage = data.data.message
+                      this.commonJs.toggle(this,data.data.message)
+
         }
         this.$store.commit('changeLoading', false)
       }).catch(err => {
@@ -251,8 +251,7 @@ export default {
           this.activeBtn = false
           this.$store.commit('changeResetPassword', data.data.dataBody || {})
         }else{
-          this.errShow = true
-          this.errMessage = data.data.message
+          this.commonJs.toggle(this,data.data.message)
         }
         this.$store.commit('changeLoading', false)
       }).catch(err => {
@@ -275,8 +274,7 @@ export default {
         if(data.data && data.data.code === '200'){
           this.$router.push('/login')
         }else{
-          this.errShow = true
-          this.errMessage = data.data.message
+          this.commonJs.toggle(this,data.data.message)
           this.$store.commit('changeLoading', false)
         }
       }).catch(err => {
@@ -371,9 +369,19 @@ export default {
         // 不要使用箭头函数
         if(val === 2){
           this.getCountDown()
-
         }
-
+      },
+      deep: true
+    },
+    account: {
+      handler: function(val, olderVal) {
+        // 不要使用箭头函数
+        if(val){
+          this.delete_active = true
+        }else{
+          this.delete_active = false
+          console.log(this.delete_active)
+        }
       },
       deep: true
     }

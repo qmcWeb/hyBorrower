@@ -104,8 +104,7 @@ export default {
             this.$router.push('/openAccount')
             this.$store.commit('changeUser', Object.assign({}, data.data.dataBody, {mobile: this.registerUser.mobile}))
           }else{
-            this.errShow = true
-            this.errMessage = data.data.message
+            this.commonJs.toggle(this,data.data.message)
             this.$store.commit('changeLoading', false)
           }
         }).catch(err => {

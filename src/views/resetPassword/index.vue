@@ -214,7 +214,8 @@ export default {
         url: this.api + '/app/platform/resetPWGCode',
         params: {
           imgCode: this.checkNumCon,
-          mobile: this.account
+          mobile: this.account,
+          source: 'huiyin'
         }
       }).then((data) => {
         this.activeBtn=false;

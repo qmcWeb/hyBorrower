@@ -126,3 +126,6 @@ input::-moz-placeholder { /* Mozilla Firefox 19+ */
 input:-ms-input-placeholder { /* Internet Explorer 10+ */
     color:#DEE2E8;font-size:.7rem;
 }
+.iphone .input_common_iphone {
+    border-bottom: 0.1rem solid #f8f8f8 !important;
+}

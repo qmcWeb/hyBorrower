@@ -122,5 +122,11 @@ export default {
                 func.apply(this, args)
             }, delay || 300)
         }
+    },
+    isIphone(){
+        if(/iP(hone|od|ad)/.test(navigator.userAgent)) {
+            document.body.classList += 'iphone'
+            // document.querySelector('input').style.tranform = 'caleY(2)'
+        }
     }
 }

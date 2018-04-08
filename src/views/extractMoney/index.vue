@@ -2,18 +2,18 @@
   <div id="extractMoney">
       <div class="main">
         <div class="blank">
-          <div class="left">提现至:</div>
+          <div class="left">提现至：</div>
           <div class="right">
             <span class="blank_img">
               <img :src="blankImg" alt="">
             </span>
-            <span>中国工商银行</span>
-            <span class="card_id">(尾号{{ bankNum }})</span>
+            <span>{{ bankName }}</span>
+            <span class="card_id">（尾号{{ bankNum }}）</span>
           </div>
         </div>
 
         <div class="money">
-          <div class="top">可提金额: {{ canUseMoney }}元</div>
+          <div class="top">可提金额： {{ canUseMoney }}元</div>
           <div class="bottom">
             <span>￥</span>
             <input type="number" @focus="errShow = false" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="mark_big">
-          <div class="tip">大额提现 <span>(单笔5万以上)</span></div>
+          <div class="tip">大额提现 <span>（单笔5万以上）</span></div>
           <div class="toggle_btn">
             <div class="row" >
                 <input type="checkbox" id="inset_3" @click="toggleTap">
@@ -37,11 +37,11 @@
 
         <div class="extract_money_info">
           <div class="top common">
-            <div class="left">提现费用:</div>
+            <div class="left">提现费用：</div>
             <div class="right">每笔1元</div>
           </div>
           <div class="bottom common">
-            <div class="left">预计到账时间:</div>
+            <div class="left">预计到账时间：</div>
             <div class="right">{{ withdrawMessage }}</div>
           </div>
         </div>
@@ -101,7 +101,8 @@ export default {
           openAccountCard: '',
           beginTime: '',
           endTime: '',
-          htmlPage: ''
+          htmlPage: '',
+          bankName: ''
       }
   },
   computed: {
@@ -166,7 +167,7 @@ export default {
           this.dataChild.beginTime = dataTemp.beginTime
           this.endTime = parseFloat(dataTemp.endTime.replace('-', '.'))
           this.dataChild.endTime = dataTemp.endTime
-
+          this.bankName = dataTemp.bankName
         }
         this.$store.commit('changeLoading', false)
       }).catch(err => {

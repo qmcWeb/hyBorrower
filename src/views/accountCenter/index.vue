@@ -62,6 +62,7 @@
           </div>
         </div>
         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
+        <set-out  @setOutShow='setOutShow' @setOutSure='setOutSure' v-if="setOutData"></set-out>
       </div>
       <div v-html='htmlPage'>
         {{ htmlPage }}
@@ -71,10 +72,12 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import ShadowBox from './shadow_box'
+import SetOut from '../../components/shodow/shadowbox'
 export default {
   name: 'accountCenter',
   components: {
-    ShadowBox
+    ShadowBox,
+    SetOut
   },
   data () {
       return {
@@ -93,7 +96,8 @@ export default {
           htmlPage: '',
           prefInfoBoolean: false,
           accountCard: '',
-          blankCard: ''
+          blankCard: '',
+          setOutData: false,
       }
   },
   computed: {
@@ -137,6 +141,9 @@ export default {
       'changeLoading',
       'changeUser'
     ]),
+    setOutShow(val){
+      this.setOutData = val
+    },
     drawCash() {
       if(this.blankBoolean && this.tradeBoolean && this.repeamentBoolean){
         this.activeBtn = true
@@ -177,6 +184,9 @@ export default {
       }
     },
     setOut() {
+      this.setOutData = true;
+    },
+    setOutSure(){
       this.$store.commit('changeUser', null)
       this.$router.push('/login')
     },

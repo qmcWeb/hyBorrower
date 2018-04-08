@@ -2,11 +2,11 @@
   <div id="register">
       <div class="main">
         <div class="account login_input_box">
-          <input @blur="delete_active=false"  v-model="account" class="login_input" type="tel" maxlength="11" placeholder="手机号／用户名" @focus="errShow=false">
+          <input @blur="delete_active=false"  v-model="account" class="login_input input_common_iphone" type="tel" maxlength="11" placeholder="手机号／用户名" @focus="errShow=false">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
-          <input ref="password" :value="password" @focus="errShow=false" v-model="password" class="login_input" :type="passwordType" placeholder="6至16位字母和数字组合">
+          <input ref="password" :value="password" @focus="errShow=false" v-model="password" class="login_input input_common_iphone" :type="passwordType" placeholder="6至16位字母和数字组合">
           <span :class="{show_password: true, hide_password: passwordType === 'text'}" @click="showPassword"></span>
         </div>
         <div class="check_input login_input_box">

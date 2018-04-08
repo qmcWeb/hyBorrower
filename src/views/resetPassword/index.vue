@@ -20,7 +20,7 @@
         </div>
         <div v-if="showBoxNum === 1" class="first common">
           <div class="account login_input_box">
-            <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input"  @focus="errShow=false" type="number" placeholder="手机号／用户名">
+            <input oninput="if(value.length>11)value=value.slice(0,11)" v-model="account" class="login_input input_common_iphone"  @focus="errShow=false" type="number" placeholder="手机号／用户名">
             <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
           </div>
           <div class="check_input login_input_box">
@@ -43,7 +43,7 @@
 
         <div v-if="showBoxNum === 3" class="third common">
           <div class="first_password login_input_box">
-            <input maxlength="16" @focus="errShow=false" v-model="firstPassword" class="login_input" type="text" placeholder="重置账户密码">
+            <input maxlength="16" @focus="errShow=false" v-model="firstPassword" class="login_input input_common_iphone" type="text" placeholder="重置账户密码">
           </div>
           <div class="second_password login_input_box">
             <input maxlength="16" @focus="errShow=false" v-model="secondPassword" class="login_input" type="text" placeholder="再次确认密码(6-16位字母和数字组合)">

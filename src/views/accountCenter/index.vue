@@ -83,9 +83,10 @@ export default {
       }
   },
   computed: {
-    ...mapState([
-      'token'
-    ])
+    ...mapState({
+      token: state => token,
+      acountSession: state => state.storeSession.acountSession
+    })
   },
   created(){
     this.getInfo()

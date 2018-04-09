@@ -10,10 +10,10 @@
                 3. 根据合规要求，还款需要用户主动操作或授权平台操作。为方便客户还款，需要客户先授权。还款日系统会自动冻结账户资金还款。
               </div>
               <div v-else class="text">
-                  工作日9:00至16:00才能大额提现,详细见提现说明。
+                  工作日{{ containerShow.beginTime.split('-')[0] || '9' }}:{{ containerShow.beginTime.split('-')[1] || '00' }}至{{ containerShow.endTime.split('-')[0] || '16' }}:{{ containerShow.endTime.split('-')[1] || '00' }}才能大额提现,详细见提现说明。
               </div>
               <div class="btn" @click="closeBox">
-                  以了解
+                  已了解
               </div>
 
           </div>

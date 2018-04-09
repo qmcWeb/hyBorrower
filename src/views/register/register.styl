@@ -23,24 +23,32 @@
         background: url('../../assets/images/login/account_delete.png') no-repeat;
       .show_password
         position: absolute;
-        width: 20px;
-        height 20px;
+        width: 1.15rem;
+        height .95rem;
         right: 1.5rem;
         top: .825rem;
         background: url('../../assets/images/login/show_password.png') no-repeat;
         background-size: contain;
+        &.hide_password
+          position: absolute;
+          width: 1.05rem;
+          height .75rem;
+          right: 1.5rem;
+          top: .825rem;
+          background: url('../../assets/images/login/hide_password.png') no-repeat;
+          background-size: contain;
       input
         font-size: .7rem;
         color: #49496A;
       &.account
         input
-          border-bottom: 1px solid #F8F8F8;
+          border-bottom: 0.05rem solid #F8F8F8;
       &.password
         input
-          border-bottom: 1px solid #F8F8F8;
+          border-bottom: 0.05rem solid #F8F8F8;
       .login_input
         width: 100%;
-        border: 0;
+        // border: 0;
         height: 2.6rem;
       .show_check_img
         width: 3rem;
@@ -59,7 +67,7 @@
       text-align: center;
       line-height: 2.5rem;
       border-radius: 2.5rem;
-      margin-top: 3%;
+      margin-top: 1rem;
       &.active_btn
         opacity: 1;
       span
@@ -67,7 +75,7 @@
         color: #fff;
         font-size: .75rem;
     .control
-      margin-top: 3%;
+      margin-top: 1rem;
       width: 16.75rem;
       text-align: center;
       font-size: .7rem;

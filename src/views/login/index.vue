@@ -1,13 +1,15 @@
 <template>
   <div id="login">
       <div class="main">
-        <div class="account login_input_box">
-          <input   v-model="account"  class="login_input" type="tel" placeholder="手机号／用户名" maxlength="11"  @focus="clearTip">
+        <div class="account login_input_box common_input_box">
+          <input @blur="delete_active=false"  v-model="account"  class="login_input input_common_iphone" type="tel" placeholder="手机号／用户名" maxlength="11"  @focus="clearTip">
           <span @click="hideDelete" :class="{delete_active: delete_active}"></span>
         </div>
         <div class="password login_input_box">
           <input ref="password" :value="password"  v-model="password" class="login_input" :type="passwordType" placeholder="请输入密码" @focus="clearTip">
-          <span class="show_password" @click="showPassword"></span>
+          <span :class="{show_password: true, hide_password: passwordType === 'text'}" @click="showPassword">
+            
+          </span>
         </div>
         <div :class="{login_btn: true, active_btn: activeBtn}" @click="loginMethod">
           <span>同意协议并登录</span>
@@ -45,7 +47,7 @@ export default {
           errMessage: '手机号输入错误',
           errShow: false,
           checkNum: false,
-          activeBtn: false
+          activeBtn: false,
       }
   },
   computed: {

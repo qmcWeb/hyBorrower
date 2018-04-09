@@ -29,6 +29,13 @@
  footer, header, menu, nav, section {
      display: block;
  }
+@media screen and (min-width: 750px){
+  html{
+    max-width: 750px;
+    margin: auto!important;;
+    font-size: 30px!important;
+  }
+ }
 
  body {
      line-height: 1;
@@ -41,7 +48,7 @@
   src:url('../fonts/numberFont.ttf')
 }
 input{
-  font-family: numberFont;
+  /* font-family: numberFont; */
   line-height: 1;
 }
 .numBerFont{
@@ -125,4 +132,7 @@ input::-moz-placeholder { /* Mozilla Firefox 19+ */
 }
 input:-ms-input-placeholder { /* Internet Explorer 10+ */
     color:#DEE2E8;font-size:.7rem;
+}
+.iphone .input_common_iphone {
+    border-bottom: 0.1rem solid #f8f8f8 !important;
 }

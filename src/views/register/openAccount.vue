@@ -5,7 +5,7 @@
           为了您的资金安全，请务必输入您本人的身份证号和银行卡号码。
         </div>
         <div class="account login_input_box">
-          <input v-model="account" @focus="errShow=false" class="login_input" type="text" placeholder="请输入真是姓名">
+          <input v-model="account" @focus="errShow=false" class="login_input input_common_iphone" type="text" placeholder="请输入真实姓名">
         </div>
         <div class="password login_input_box">
           <input maxlength="18" @focus="errShow=false" ref="password" v-model="password" class="login_input" type="text" placeholder="请输入身份证号">

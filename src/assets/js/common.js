@@ -96,7 +96,9 @@ export default {
     getTimeNow: function() {
         const timeNow = new Date()
         return {
-            hours: timeNow.getHours()
+            hours: timeNow.getHours(),
+            minutes: timeNow.getMinutes(),
+            hourMinute: parseFloat(timeNow.getHours() + '.' + timeNow.getMinutes())
         }
     },
     //隐藏error
@@ -119,6 +121,12 @@ export default {
             timer = setTimeout(() => {
                 func.apply(this, args)
             }, delay || 300)
+        }
+    },
+    isIphone(){
+        if(/iP(hone|od|ad)/.test(navigator.userAgent)) {
+            document.body.className += 'iphone'
+            // document.querySelector('input').style.tranform = 'caleY(2)'
         }
     }
 }

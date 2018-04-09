@@ -14,6 +14,8 @@ import './assets/css/button.css'
 
 import commonJs from './assets/js/common.js'
 Vue.config.productionTip = false
+// 判断是否是iphone解决，input 1px下边框的不显示的问题
+commonJs.isIphone()
 
 Vue.use(VueWechatTitle)
 Vue.use(ElementUI)

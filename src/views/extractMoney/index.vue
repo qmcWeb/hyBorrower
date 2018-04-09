@@ -2,26 +2,26 @@
   <div id="extractMoney">
       <div class="main">
         <div class="blank">
-          <div class="left">提现至:</div>
+          <div class="left">提现至：</div>
           <div class="right">
             <span class="blank_img">
               <img :src="blankImg" alt="">
             </span>
-            <span>中国工商银行</span>
-            <span class="card_id">(尾号{{ bankNum }})</span>
+            <span>{{ bankName }}</span>
+            <span class="card_id">（尾号{{ bankNum }}）</span>
           </div>
         </div>
 
         <div class="money">
-          <div class="top">可提金额: {{ canUseMoney }}元</div>
+          <div class="top">可提金额： {{ canUseMoney }}元</div>
           <div class="bottom">
             <span>￥</span>
-            <input type="number" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
+            <input type="number" @focus="errShow = false" class="numBerFont" v-model="moenyCash" placeholder="请输入金额">
           </div>
         </div>
 
         <div class="mark_big">
-          <div class="tip">大额提现 <span>(单笔5万以上)</span></div>
+          <div class="tip">大额提现 <span>（单笔5万以上）</span></div>
           <div class="toggle_btn">
             <div class="row" >
                 <input type="checkbox" id="inset_3" @click="toggleTap">
@@ -32,16 +32,16 @@
 
         <div v-if="bigMoneyCard" class="big_money_card">
           <span class="left">开户行行号</span>
-          <input type="text" v-model="openAccountCard" placeholder="联系银行获取联行号并输入">
+          <input type="text" @focus="errShow = false" v-model="openAccountCard" placeholder="联系银行获取联行号并输入">
         </div>
 
         <div class="extract_money_info">
           <div class="top common">
-            <div class="left">提现费用:</div>
+            <div class="left">提现费用：</div>
             <div class="right">每笔1元</div>
           </div>
           <div class="bottom common">
-            <div class="left">预计到账时间:</div>
+            <div class="left">预计到账时间：</div>
             <div class="right">{{ withdrawMessage }}</div>
           </div>
         </div>
@@ -54,7 +54,7 @@
           我已阅读并同意 <a href="https://www.qianmancang.com/mobile/mobile-withdrawAgreement" style="color: #3836e9">《钱满仓提现服务协议》</a>
         </div>
 
-        <a class="extract_info" href="https://www.qianmancang.com/mobile/user/transfer-rules">
+        <a class="extract_info" href="javascript: void(0);" @click="$router.push('/extractServerTip')">
           提现说明
         </a>
         <shadow-box :containerShow='dataChild' @shadowBoxData='shadowBoxData' v-if="boxBoolean"></shadow-box>
@@ -82,7 +82,9 @@ export default {
           boxBoolean: false,
           dataChild: {
             title: '提示',
-            containerBoolean: false
+            containerBoolean: false,
+            beginTime: '',
+            endTime: ''
           },
           canUseMoney: '',
           bankNum: '',
@@ -99,7 +101,8 @@ export default {
           openAccountCard: '',
           beginTime: '',
           endTime: '',
-          htmlPage: ''
+          htmlPage: '',
+          bankName: ''
       }
   },
   computed: {
@@ -115,9 +118,9 @@ export default {
       'changeLoading'
     ]),
     toggleTap() {
-      console.log(this.commonJs.getTimeNow().hours)
+      console.log(this.commonJs.getTimeNow().hours,this.commonJs.getTimeNow().hourMinute,this.beginTime)
       // 判断是否正常工作时间
-      if(!this.holiday && this.commonJs.getTimeNow().hours >= this.beginTime && this.commonJs.getTimeNow().hours <= this.endTime){
+      if(!this.holiday && this.commonJs.getTimeNow().hourMinute >= this.beginTime && this.commonJs.getTimeNow().hourMinute <= this.endTime){
         this.bigMoneyCard = !this.bigMoneyCard
         if(this.bigMoneyCard){
           if(this.moenyCash < this.cardLimit){
@@ -161,8 +164,10 @@ export default {
           this.withdrawMessage3 = dataTemp.withdrawMessage3
           this.openAccountCard = dataTemp.payAllianceCode
           this.beginTime = parseFloat(dataTemp.beginTime.replace('-', '.'))
+          this.dataChild.beginTime = dataTemp.beginTime
           this.endTime = parseFloat(dataTemp.endTime.replace('-', '.'))
-
+          this.dataChild.endTime = dataTemp.endTime
+          this.bankName = dataTemp.bankName
         }
         this.$store.commit('changeLoading', false)
       }).catch(err => {

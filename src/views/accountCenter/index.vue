@@ -53,6 +53,13 @@
                 <span v-else class="control_btn" @click="goSetPower" :class="{unable_btn: !tradeBoolean}">去授权</span>
               </div>
             </div>
+            <div class="paymoney_power user_li">
+              <div class="text">缴费授权</div>
+              <div class="control">
+                <span v-if="paymoneyPowerBoolean" class="control_text">已授权</span>
+                <span v-else class="control_btn" @click="goPaymoneyPower" :class="{unable_btn: !repeamentBoolean}">去授权</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -88,6 +95,7 @@ export default {
           blankBoolean: false,
           tradeBoolean: false,
           repeamentBoolean: false,
+          paymoneyPowerBoolean: false,
           boxBoolean: false,
           dataChild: {
             title: '开户及授权说明',
@@ -143,7 +151,7 @@ export default {
       this.setOutData = val
     },
     drawCash() {
-      if(this.blankBoolean && this.tradeBoolean && this.repeamentBoolean){
+      if(this.blankBoolean && this.tradeBoolean && this.repeamentBoolean && this.paymoneyPowerBoolean){
         this.activeBtn = true
       }
     },
@@ -165,6 +173,7 @@ export default {
           this.blankBoolean = this.prefInfoBoolean ? true : false
           this.tradeBoolean = dataTemp.isPasswordSet === 'true' ? true : false
           this.repeamentBoolean = dataTemp.isRepayAuthSet === 'true' ? true : false
+          this.paymoneyPowerBoolean = dataTemp.isPaymentAuthSet === 'true' ? true : false
           this.drawCash();
           this.$store.commit('changeLoading', false)
         }else{
@@ -245,6 +254,28 @@ export default {
           this.$store.commit('changeLoading', false)
         }).catch(err => {
           console.log(err)
+          this.$store.commit('changeLoading', false)
+        })
+      }
+    },
+    goPaymoneyPower(){
+      if(!this.paymoneyPowerBoolean && this.repeamentBoolean){
+        this.$http({
+          method: 'post',
+          url: this.api + '/app/fdep/user/paymentAuthPage',
+          params: {
+            token: this.token
+          }
+        }).then(data => {
+          if(data.data && data.data.code === '200'){
+            this.htmlPage = data.data.dataBody.paymentAuth
+            this.$nextTick(() => {
+              document.getElementById("frm1").submit()
+            })
+          }
+          this.$store.commit('changeLoading', false)
+        }).catch(err => {
+          console.log(err) 
           this.$store.commit('changeLoading', false)
         })
       }

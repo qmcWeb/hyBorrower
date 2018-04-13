@@ -116,6 +116,10 @@ export default {
     },
     loginMethod() {
       if(this.activeBtn){
+        // 密码验证
+        if(this.checkPassword()){
+          return
+        }
         this.$store.commit('changeLoading', true)
         this.$store.commit('changeRegisterUser', {
           mobile: this.account,
@@ -154,15 +158,8 @@ export default {
     checkPassword() {
       this.checkPasswordBoolean = this.commonJs.passwordCheck(this.password)
       if(!this.checkPasswordBoolean){
-        this.errShow = true
-        this.errMessage = '密码长度为6至16位字母和数字组合'
-      }else{
-        this.errShow = false
-      }
-      if(this.checkNum&&this.checkPasswordBoolean&&this.accountBoolean){
-        this.activeBtn = true
-      }else{
-        this.activeBtn = false
+        this.commonJs.toggle(this,'密码应为6-16位数字和字母')
+        return true
       }
     },
     getImgCode(){

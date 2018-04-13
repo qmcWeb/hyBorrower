@@ -222,7 +222,7 @@ export default {
       }else{
         this.errShow = false
       }
-      if(this.moenyCash > this.canUseMoney){
+      if(parseFloat(this.moenyCash) > parseFloat(this.canUseMoney)){
         this.errShow = true
         this.errMessage = '提现金额需小于可提金额'
         return false
